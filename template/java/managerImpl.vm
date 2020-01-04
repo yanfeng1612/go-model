@@ -1,0 +1,189 @@
+package {{.config.PackageName}}.manager.impl;
+
+import java.util.List;
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
+import com.alibaba.fastjson.JSON;
+
+import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.dao.{{.backendObject.JavaBeanName}}Mapper;
+import {{.config.PackageName}}.manager.{{.backendObject.JavaBeanName}}Manager;
+import {{.config.PackageName}}.utils.*;
+
+/**
+ * {{.backendObject.Comment}}
+ * @author {{.author}}
+ * @date {{.date}}
+ **/
+@Component("{{.backendObject.JavaBeanNameLower}}Manager")
+public class {{.backendObject.JavaBeanName}}ManagerImpl implements {{.backendObject.JavaBeanName}}Manager {
+
+    private final static Logger logger = LoggerFactory.getLogger({{.backendObject.JavaBeanName}}ManagerImpl.class);
+
+    @Autowired
+    private {{.backendObject.JavaBeanName}}Mapper {{.backendObject.JavaBeanNameLower}}Mapper;
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public int insert{{.backendObject.JavaBeanName}}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
+        return {{.backendObject.JavaBeanNameLower}}Mapper.insert({{.backendObject.JavaBeanNameLower}});
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public int insertBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List){
+        return {{.backendObject.JavaBeanNameLower}}Mapper.insertBatch({{.backendObject.JavaBeanNameLower}}List);
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public int deleteById(long id){
+        return {{.backendObject.JavaBeanNameLower}}Mapper.deleteById(id);
+    }
+
+     /**
+     *
+     * @generated
+     */
+    @Override
+    public int update{{.backendObject.JavaBeanName}}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
+        return {{.backendObject.JavaBeanNameLower}}Mapper.update({{.backendObject.JavaBeanNameLower}});
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Transactional
+    @Override
+    public int updateBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List){
+        int result = 0;
+        for({{.backendObject.JavaBeanName}} item : {{.backendObject.JavaBeanNameLower}}List){
+            int count = {{.backendObject.JavaBeanNameLower}}Mapper.update(item);
+            result += count;
+        }
+        return result;
+    }
+
+    @Override
+    public {{.backendObject.JavaBeanName}} findById({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}){
+        return {{.backendObject.JavaBeanNameLower}}Mapper.findById({{.backendObject.JavaBeanNameLower}});
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public ListResult<{{.backendObject.JavaBeanName}}> search{{.backendObject.JavaBeanName}}List(Query<{{.backendObject.JavaBeanName}}Query> query) {
+        List<{{.backendObject.JavaBeanName}}> list = {{.backendObject.JavaBeanNameLower}}Mapper.getAllList(query);
+        ListResult<{{.backendObject.JavaBeanName}}> result = new ListResult<{{.backendObject.JavaBeanName}}>();
+        result.setMsg("查询成功");
+        result.setCode(CodeEnum.SUCCESS.getCode());
+        result.setValues(list);
+        return result;
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public PageListResult<{{.backendObject.JavaBeanName}}> searchPage{{.backendObject.JavaBeanName}}List(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery) {
+        long count = {{.backendObject.JavaBeanNameLower}}Mapper.getCount(pageQuery);
+        PageQueryWrapper<{{.backendObject.JavaBeanName}}Query> wrapper = new PageQueryWrapper<{{.backendObject.JavaBeanName}}Query>(pageQuery.getPageNo(),pageQuery.getPageSize(),count,pageQuery.getQuery());
+        List<{{.backendObject.JavaBeanName}}> itemList = {{.backendObject.JavaBeanNameLower}}Mapper.getPagenationList(wrapper);
+        PageListResult<{{.backendObject.JavaBeanName}}> retValue = new PageListResult<>();
+        retValue.setMsg("查询成功");
+        retValue.setCode(CodeEnum.SUCCESS.getCode());
+        retValue.setValues(itemList);
+        long currentPage = pageQuery.getPageNo() > 1 ? pageQuery.getPageNo() : 1;
+        Pagenation pagenation = new Pagenation(currentPage, count, pageQuery.getPageSize());
+        retValue.setPagenation(pagenation);
+        return retValue;
+    }
+
+    /**
+    *
+    * @generated
+    */
+    @Override
+    public ListResult<{{.backendObject.JavaBeanName}}> searchPage{{.backendObject.JavaBeanName}}ListById(IdPageQuery<{{.backendObject.JavaBeanName}}Query> idPageQuery) {
+        List<{{.backendObject.JavaBeanName}}> itemList = {{.backendObject.JavaBeanNameLower}}Mapper.getPagenationListById(idPageQuery);
+        ListResult<{{.backendObject.JavaBeanName}}> retValue = new ListResult<{{.backendObject.JavaBeanName}}>();
+        retValue.setMsg("查询成功");
+        retValue.setCode(CodeEnum.SUCCESS.getCode());
+        retValue.setValues(itemList);
+        return retValue;
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public GenericResult<Long> getTotalCount(Query<{{.backendObject.JavaBeanName}}Query> query){
+        long count = {{.backendObject.JavaBeanNameLower}}Mapper.getTotalCount(query);
+        GenericResult<Long> result = new GenericResult<>();
+        result.setMsg("查询成功");
+        result.setCode(CodeEnum.SUCCESS.getCode());
+        result.setValue(Long.valueOf(count));
+        return result;
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
+    public GenericResult<Long> getCount(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery){
+        long count = {{.backendObject.JavaBeanNameLower}}Mapper.getCount(pageQuery);
+        GenericResult<Long> result = new GenericResult<>();
+        result.setMsg("查询成功");
+        result.setCode(CodeEnum.SUCCESS.getCode());
+        result.setValue(Long.valueOf(count));
+        return result;
+    }
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    /**
+    *
+    * @generated
+    */
+    @Override
+    public {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(String ${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), ${shardingField.showType} ${shardingField.fieldName}#end) {
+        return {{.backendObject.JavaBeanNameLower}}Mapper.search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), ${shardingField.fieldName}#end);
+    }
+    {{end}}
+    {{end}}
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    /**
+    *
+    * @generated
+    */
+    @Transactional
+    @Override
+    public int update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
+        return {{.backendObject.JavaBeanNameLower}}Mapper.update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanNameLower}});
+    }
+    {{end}}
+    {{end}}
+}

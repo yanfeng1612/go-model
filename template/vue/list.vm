@@ -1,0 +1,143 @@
+<template>
+    <div class="table">
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item><i class="el-icon-date"></i>菜单</el-breadcrumb-item>
+                <el-breadcrumb-item>${frontendObject.objectDesc}管理</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="container">
+            <div class="handle-box">
+                {{range $i,$field := .backendObject.Columns}}
+                    <el-input v-model="searchData.query.{{$field.JavaFieldName}}" placeholder="{{$field.Comment}}" class="handle-input mr10"></el-input>
+                 {{end}}
+                <el-button type="primary" icon="search" @click="search">搜 索</el-button>
+            </div>
+            <div class="handle-box">
+                <el-button type="primary" icon="search" @click="toAdd">新 增</el-button>
+            </div>
+            <el-table :data="tableData" border style="width: 100%" ref="multipleTable" @selection-change="handleSelectionChange">
+                {{range $i,$field := .backendObject.Columns}}
+                    <el-table-column prop="{{$field.JavaFieldName}}" label="{{$field.Comment}}"   ></el-table-column>
+                {{end}}
+                <el-table-column label="操作" width="180">
+                    <template slot-scope="scope">
+                        <el-button size="small" @click="toEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="small" @click="toDetail(scope.$index, scope.row)" >查询详情</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination">
+                <el-pagination ref="tabPagination" @current-change="handleCurrentChange" @size-change="handleSizeChange"
+                               layout="total, sizes, prev, pager, next, jumper" :current-page.sync="pageInfo.curPage"
+                               :page-size="pageInfo.pageSize"
+                               :total="pageInfo.itemCount">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import {requestData} from "../../../utils/request";
+
+    export default {
+        name: 'basetable',
+        data() {
+            return {
+                searchData: {query : {yn: "1"}},
+                tableData: [],
+                pageInfo: {curPage: 1, pageNo: 1, pageSize: 10, itemCount: 1}
+            }
+        },
+        created() {
+            this.getData();
+        },
+        computed: {
+            data() {
+                return this.tableData;
+            }
+        },
+        methods: {
+            handleCurrentChange(val) {
+                this.pageInfo.curPage = val;
+                this.getData();
+            },
+            handleSizeChange(val) {
+                this.pageInfo.pageSize = val;
+                this.getData();
+            },
+            getData() {
+                let self = this;
+                let sData = this.searchData;
+                sData["pageSize"] = this.pageInfo.pageSize;
+                sData["pageNo"] = this.pageInfo.curPage;
+                requestData({
+                    "url": "/api/{{.backendObject.JavaBeanNameLower}}/list?pageSize=" + self.pageInfo.pageSize + "&pageNo=" + self.pageInfo.curPage,
+                    "data": this.searchData
+                    , "callback": function (response) {
+                        self.tableData = response.values;
+                        self.pageInfo.curPage = response.pagenation.pageNo;
+                        self.pageInfo.itemCount = response.pagenation.itemCount;
+                    }
+                });
+            },
+            toAdd() {
+                this.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}Edit'});
+            },
+            toEdit(index, row) {
+                const item = this.tableData[index];
+                this.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}Edit', query: {id : item.id}, meta: {title: "edit"}});
+            },
+            toDetail(index, row) {
+                const item = this.tableData[index];
+                this.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}Detail', query: {id : item.id}, meta: {title: "edit"}});
+            },
+            search() {
+                this.$refs.tabPagination.lastEmittedPage = 1;
+                this.pageInfo = {curPage: 1, pageNo: 1, pageSize: 10, itemCount: 1};
+                this.getData();
+            },
+            // dateFormatterYYMMDD(row, column) {
+            //     const date = row[column.property];
+            //     if (date === undefined) {
+            //         return "";
+            //     }
+            //     return moment(date).format("YYYY-MM-DD");
+            // },
+            // dateFormatter(row, column) {
+            //     const date = row[column.property];
+            //     if (date === undefined) {
+            //         return "";
+            //     }
+            //     return moment(date).format("YYYY-MM-DD HH:mm:ss");
+            // },
+            // filterTag(value, row) {
+            //     return row.tag === value;
+            // },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+        }
+    }
+</script>
+
+<style scoped>
+    .handle-box {
+        margin-bottom: 20px;
+    }
+
+    .handle-select {
+        width: 120px;
+    }
+
+    .handle-input {
+        width: 200px;
+        display: inline-block;
+    }
+
+    .del-dialog-cnt {
+        font-size: 16px;
+        text-align: center
+    }
+</style>

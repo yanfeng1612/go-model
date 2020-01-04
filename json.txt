@@ -1,0 +1,22 @@
+{
+    "projectName" : "fc-trade",
+    "projectAdminName" : "fc-trade-admin",
+    "packageName" : "com.jd.fc.trade",
+    "dataBaseName": "fund_cloud",
+    "DatabaseIp"  : "127.0.0.1",
+    "DatabasePort":  3306,
+    "DatabaseUsername": "root",
+    "DatabasePassword": "111111",
+    "exportPath": "D:\\go\\src\\github.com\\yanfeng1612\\go-model\\build\\",
+    "tableConfigList": [
+        {
+            "tableName": "acc_cust_info",
+            "singleQueryList": [
+                "cust_no"
+            ],
+            "inListQuery": [
+                "business_code"
+            ]
+        }
+    ]
+}

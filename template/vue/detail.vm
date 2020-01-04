@@ -1,0 +1,139 @@
+<template>
+    <el-form :model="ajaxData" ref="ajaxData" label-width="200px" class="demo-ruleForm">
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item><i class="el-icon-date"></i> ${frontendObject.objectDesc}</el-breadcrumb-item>
+                <el-breadcrumb-item>${frontendObject.objectDesc}-详情信息</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="container container-margin">
+        <el-row>
+#set($JQ="$")
+#foreach($column in $editColumns)
+#if($velocityCount%2==0)
+#set($flag="0")
+                <el-row>
+#end
+                    <el-col :span="8">
+                        <el-form-item label="${column.showName}：" prop="${column.name}">
+#if($column.type == 0)
+                            {{ajaxData.${column.name}}}
+#elseif($column.type == 1)
+#foreach($val in $column.valueList)
+                            <span v-if="ajaxData.${column.name} == '${val.showKey}'">${val.showValue}</span>
+#end
+#end
+                        </el-form-item>
+                    </el-col>
+#if($velocityCount%2==1)
+#set($flag="1")
+                </el-row>
+#end
+#end
+#if(${flag}==0)
+            </el-row>
+#end
+        </div>
+        <div class="container-margin to-center ">
+            <el-button type="primary" @click="cancelDetail()">返回</el-button>
+        </div>
+    </el-form>
+
+</template>
+
+<script>
+    import {ListUrl} from "../../../assets/common";
+    import {ajaxData} from "../../../assets/api";
+    import {Utils} from "../../../assets/Utils";
+
+    export default {
+        name: 'baseform',
+        data: function () {
+            return {
+                ajaxData: {
+
+                },
+                item :{id:this.$route.query.id},
+            }
+        },
+        created() {
+            this.getData();
+        },
+        methods: {
+            getData() {
+                let self = this;
+                if (this.item.id == null || this.item.id == undefined) {
+                    return;
+                }
+                var reqData = {"id":this.item.id};
+                ajaxData({
+                    "url": ListUrl.${objectName}Detail,
+                    "data":reqData,
+                    "callback": function (redata) {
+                        if(redata == null || redata == undefined) {
+                            return;
+                        }
+                        self.ajaxData = redata;
+                    }
+                });
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            cancelDetail: function () {
+                this.${JQ}router.push({path: '/${objectName}List'});
+            }
+        }
+    }
+</script>
+<style>
+    .container-margin {
+        margin-top: 10px;
+    }
+
+    .bold {
+        font-weight: bold;
+        color: #606266;
+    }
+
+    .to-right {
+        text-align: right;
+    }
+
+    .to-center {
+        text-align: center;
+    }
+
+    .el-row {
+        margin-top: 10px;
+    }
+    :last-child {
+        margin-bottom: 0;
+    }
+    .el-col {
+        border-radius: 4px;
+    }
+
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+
+    .bg-purple {
+        background: #d3dce6;
+    }
+
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+        color: #606266;
+    }
+
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
+</style>

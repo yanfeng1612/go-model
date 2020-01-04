@@ -1,0 +1,179 @@
+<template>
+    <el-form :rules="rules" :model="formData" ref="formData" label-width="160px" class="demo-ruleForm">
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item><i class="el-icon-date"></i> ${frontendObject.objectDesc}</el-breadcrumb-item>
+                <el-breadcrumb-item>编辑${frontendObject.objectDesc}信息</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="container container-margin">
+            <el-input v-model="formData.id" type="hidden" />
+            <el-row>
+#set($JQ="$")
+#foreach($column in $editColumns)
+#if($velocityCount%2==0)
+#set($flag="0")
+                <el-row>
+#end
+                <el-col :span="8">
+                    <el-form-item label="${column.showName}：" prop="${column.name}">
+#if($column.type == 0)
+                        <el-input v-model="formData.${column.name}" placeholder="${column.showName}"></el-input>
+#elseif($column.type == 1)
+                        <el-select v-model="formData.${column.name}" placeholder="请选择">
+#foreach($val in $column.valueList)
+                                <el-option key="${val.showKey}" label="${val.showValue}" :value="${val.showKey}"></el-option>
+#end
+                        </el-select>
+#end
+                    </el-form-item>
+                </el-col>
+#if($velocityCount%2==1)
+#set($flag="1")
+                </el-row>
+#end
+#end
+#if(${flag}==0)
+            </el-row>
+#end
+        </div>
+        <div class="container-margin to-center ">
+            <el-button type="primary" @click="toSave">保 存</el-button>
+            <el-button type="primary" @click="toCancel">取 消</el-button>
+        </div>
+    </el-form>
+</template>
+
+<script>
+    import {ListUrl} from "../../../assets/common";
+    import {ajaxData} from "../../../assets/api";
+    import {Utils} from "../../../assets/Utils";
+
+    export default {
+        name: 'baseform',
+        data: function () {
+            return {
+                selectItem: null,
+                loginUserType:localStorage.getItem('userType'),
+                loginCompanyNo:localStorage.getItem('companyNo'),
+                enable :false,
+                oldData: null,
+                isInactive: false,
+                formData: {},
+                rules: {
+#foreach($column in $columns)
+#if(!${column.isIdentityPk})
+                    ${column.name}: [ {required: true, message: '请输入${column.showName}', trigger: 'blur'}]#if($velocityCount!=$columns.size()),#end
+#end
+#end
+        }
+        }
+        },
+        created() {
+            this.getData();
+        },
+        methods: {
+            getData() {
+                var self = this;
+                if (this.$route.query.id != null) {
+                    ajaxData({
+                        "url": ListUrl.${objectName}Detail,
+                        "data": {id: this.${JQ}route.query.id},
+                        "callback": function (redata) {
+                            self.formData = redata;
+                        }
+                    });
+                }
+            },
+            toSave() {
+                var self = this;
+
+                this.${JQ}refs["formData"].validate((valid) => {
+                    if (valid) {
+                        ajaxData({
+                            "url": ListUrl.${objectName}Edit,
+                            "data": this.formData
+                            , "callback": function (redata) {
+                                self.${JQ}message({
+                                    type: 'success',
+                                    message: '保存成功!'
+                                });
+                                self.${JQ}router.push({path: '/${objectName}List'});
+                            }
+                        });
+
+                    }
+                });
+            },
+            toCancel() {
+                this.${JQ}router.push({path: '/${objectName}List'});
+            },
+            onSubmit: function () {
+                var isValid = false;
+                this.${JQ}refs["formData"].validate((valid) => {
+                    if (valid) {
+                        isValid = true;
+                    } else {
+                        isValid = false;
+            }
+            });
+                return isValid;
+            }
+        }
+    }
+</script>
+<style>
+    .container-margin {
+        margin-top: 10px;
+    }
+
+    .bold {
+        font-weight: bold;
+        color: #606266;
+    }
+
+    .to-right {
+        text-align: right;
+    }
+
+    .to-center {
+        text-align: center;
+    }
+
+    .el-row {
+
+        margin-top: 10px;
+
+    }
+    :last-child {
+        margin-bottom: 0;
+    }
+
+
+    .el-col {
+        border-radius: 4px;
+    }
+
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+
+    .bg-purple {
+        background: #d3dce6;
+    }
+
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+        color: #606266;
+    }
+
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
+</style>
