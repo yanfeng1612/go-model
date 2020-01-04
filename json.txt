@@ -1,7 +1,7 @@
 {
-    "projectName" : "fc-trade",
-    "projectAdminName" : "fc-trade-admin",
-    "packageName" : "com.jd.fc.trade",
+    "projectName" : "demo",
+    "projectAdminName" : "demo-admin",
+    "packageName" : "com.demo",
     "dataBaseName": "fund_cloud",
     "DatabaseIp"  : "127.0.0.1",
     "DatabasePort":  3306,
