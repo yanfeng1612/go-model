@@ -1,21 +1,24 @@
 {
+    "backTheme" : "SpringCloud",
+    "frontTheme" : "None"
     "projectName" : "demo",
     "projectAdminName" : "demo-admin",
     "packageName" : "com.demo",
-    "dataBaseName": "fund_cloud",
+    "dataBaseName": "demo",
     "DatabaseIp"  : "127.0.0.1",
     "DatabasePort":  3306,
     "DatabaseUsername": "root",
     "DatabasePassword": "111111",
-    "exportPath": "D:\\go\\src\\github.com\\yanfeng1612\\go-model\\build\\",
+    "exportPath": "D:\\",
+    "firstInit" : true,
     "tableConfigList": [
         {
-            "tableName": "acc_cust_info",
+            "tableName": "user",
             "singleQueryList": [
-                "cust_no"
+                "username"
             ],
             "inListQuery": [
-                "business_code"
+                "password"
             ]
         }
     ]

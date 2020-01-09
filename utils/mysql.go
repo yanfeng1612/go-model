@@ -153,10 +153,12 @@ func convertJavaFieldName(tableName string) string {
 func convertJavaFieldType(t string) string {
 	result := ""
 	switch t {
-	case "bigint":
-		result = "Long"
+	case "tinyint":
+		result = "Integer"
 	case "int":
 		result = "Integer"
+	case "bigint":
+		result = "Long"
 	case "varchar":
 		result = "String"
 	case "date":

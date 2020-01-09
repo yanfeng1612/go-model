@@ -14,6 +14,8 @@ import (
 )
 
 type Config struct {
+	BackTheme        string        `json:"backTheme"`
+	FrontTheme       string        `json:"frontTheme"`
 	ProjectName      string        `json:"projectName"`
 	ProjectAdminName string        `json:"projectAdminName"`
 	PackageName      string        `json:"packageName"`
@@ -24,6 +26,7 @@ type Config struct {
 	DatabaseUsername string        `json:"databaseUsername"`
 	DatabasePassword string        `json:"databasePassword"`
 	TableConfigList  []TableConfig `json:"tableConfigList"`
+	FirstInit        bool          `json:"firstInit"`
 }
 
 type TableConfig struct {
@@ -33,6 +36,11 @@ type TableConfig struct {
 	SingleQueryList []string `json:"singleQueryList"`
 	InListQuery     []string `json:"inListQuery"`
 	UpdateFieldList []string `json:"updateFieldList"`
+}
+
+type Theme struct {
+	ThemeName string
+	templates []string
 }
 
 const (
@@ -76,7 +84,12 @@ const (
 )
 
 func main() {
-	jsonTxt, err := ioutil.ReadFile(ConfigPath)
+	args := os.Args
+	configPath := ConfigPath
+	if len(args) > 1 {
+		configPath = args[1]
+	}
+	jsonTxt, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		panic(err)
 	}
@@ -93,7 +106,7 @@ func main() {
 
 	prepare(*config)
 
-	schema := utils.ParseSqlFromMySqlSchema("127.0.0.1", 3306, "root", "111111", "fund_cloud")
+	schema := utils.ParseSqlFromMySqlSchema(config.DatabaseIp, config.DatabasePort, config.DatabaseUsername, config.DatabasePassword, config.DataBaseName)
 
 	inListMap := make(map[string]int)
 	singleQueryMap := make(map[string]int)
@@ -136,70 +149,81 @@ func main() {
 
 // 初始化 1.初始化文件目录
 func prepare(config Config) {
-	path := config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
-	err := os.MkdirAll(path, os.ModePerm)
-	if err != nil {
-		panic("创建项目文件夹失败!")
-	}
-	err = os.MkdirAll(path+"/utils/", os.ModePerm)
-	if err != nil {
-		panic("创建utils文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(path+"/pojo/", os.ModePerm)
-	if err != nil {
-		panic("创建pojo文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(path+"/controller/", os.ModePerm)
-	if err != nil {
-		panic("创建controller失败")
-	}
-	err = os.MkdirAll(path+"/service/", os.ModePerm)
-	if err != nil {
-		panic("创建service文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(path+"/service/impl/", os.ModePerm)
-	if err != nil {
-		panic("创建serviceImpl文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(path+"/manager/", os.ModePerm)
-	if err != nil {
-		panic("创建manager文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(path+"/manager/impl/", os.ModePerm)
-	if err != nil {
-		panic("创建managerImpl文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(path+"/dao/", os.ModePerm)
-	if err != nil {
-		panic("创建dao文件夹失败!" + err.Error())
-	}
-	err = os.MkdirAll(config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/", os.ModePerm)
-	if err != nil {
-		panic("创建mapperXml文件夹失败!" + err.Error())
+	if config.BackTheme != "None" {
+		path := config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
+		err := os.MkdirAll(path, os.ModePerm)
+		if err != nil {
+			panic("创建项目文件夹失败!")
+		}
+		err = os.MkdirAll(path+"/utils/", os.ModePerm)
+		if err != nil {
+			panic("创建utils文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(path+"/pojo/", os.ModePerm)
+		if err != nil {
+			panic("创建pojo文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(path+"/controller/", os.ModePerm)
+		if err != nil {
+			panic("创建controller失败")
+		}
+		err = os.MkdirAll(path+"/service/", os.ModePerm)
+		if err != nil {
+			panic("创建service文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(path+"/service/impl/", os.ModePerm)
+		if err != nil {
+			panic("创建serviceImpl文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(path+"/manager/", os.ModePerm)
+		if err != nil {
+			panic("创建manager文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(path+"/manager/impl/", os.ModePerm)
+		if err != nil {
+			panic("创建managerImpl文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(path+"/dao/", os.ModePerm)
+		if err != nil {
+			panic("创建dao文件夹失败!" + err.Error())
+		}
+		err = os.MkdirAll(config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/", os.ModePerm)
+		if err != nil {
+			panic("创建mapperXml文件夹失败!" + err.Error())
+		}
 	}
 
-	// 前端vue框架
-	err = os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName, os.ModePerm)
-	if err != nil {
-		panic("创建vue-admin失败")
+	if config.FrontTheme != "None" {
+		// 前端vue框架
+		err := os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName, os.ModePerm)
+		if err != nil {
+			panic("创建vue-admin失败")
+		}
+		err = os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName+"/src", os.ModePerm)
+		if err != nil {
+			panic("创建vue src失败")
+		}
+		err = utils.CopyDir(TemplateVueRootPath+"/static", config.ExportPath+config.ProjectAdminName)
+		if err != nil {
+			panic("创建admin静态资源文件失败")
+		}
 	}
-	err = os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName+"/src", os.ModePerm)
-	if err != nil {
-		panic("创建vue src失败")
-	}
-	err = utils.CopyDir(TemplateVueRootPath+"/static", config.ExportPath+config.ProjectAdminName)
-	if err != nil {
-		panic("创建admin静态资源文件失败")
-	}
+
 }
 
 func buildUtils(config Config) {
 	m := buildCommonMap(config)
 
+	if config.BackTheme == "None" {
+		return
+	}
+
 	prefix := config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
-	run(PomPath, config.ExportPath+"/"+config.ProjectName+"/pom.xml", m)
-	run(BootstrapPath, prefix+"/Bootstrap.java", m)
-	run(ApplicationConfigPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/application.yml", m)
+	if config.FirstInit {
+		run(PomPath, config.ExportPath+"/"+config.ProjectName+"/pom.xml", m)
+		run(BootstrapPath, prefix+"/Bootstrap.java", m)
+		run(ApplicationConfigPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/application.yml", m)
+	}
 	run(BasicResultPath, prefix+"/utils/BasicResult.java", m)
 	run(CodeEnumPath, prefix+"/utils/CodeEnum.java", m)
 	run(QueryPath, prefix+"/utils/Query.java", m)
@@ -291,28 +315,37 @@ func buildDynamic(config Config, schema *utils.Schema) {
 		m := buildCommonMap(config)
 		m["backendObject"] = table
 		m["columnSize"] = len(table.Columns)
-		run(PojoPath, pathPrefix+"/pojo/"+table.JavaBeanName+".java", m)
-		run(ControllerPath, pathPrefix+"/controller/"+table.JavaBeanName+"Controller.java", m)
-		run(PojoQueryPath, pathPrefix+"/pojo/"+table.JavaBeanName+"Query.java", m)
-		run(ServicePath, pathPrefix+"/service/"+table.JavaBeanName+"Service.java", m)
-		run(ServiceImplPath, pathPrefix+"/service/impl/"+table.JavaBeanName+"ServiceImpl.java", m)
-		run(ManagerPath, pathPrefix+"/manager/"+table.JavaBeanName+"Manager.java", m)
-		run(ManagerImplPath, pathPrefix+"/manager/impl/"+table.JavaBeanName+"ManagerImpl.java", m)
-		run(MapperPath, pathPrefix+"/dao/"+table.JavaBeanName+"Mapper.java", m)
-		run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/"+table.JavaBeanName+"Mapper.xml", m)
 
-		err := os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower, os.ModePerm)
-		if err != nil {
-			panic(err)
+		if config.BackTheme != "None" {
+			run(PojoPath, pathPrefix+"/pojo/"+table.JavaBeanName+".java", m)
+			run(ControllerPath, pathPrefix+"/controller/"+table.JavaBeanName+"Controller.java", m)
+			run(PojoQueryPath, pathPrefix+"/pojo/"+table.JavaBeanName+"Query.java", m)
+			run(ServicePath, pathPrefix+"/service/"+table.JavaBeanName+"Service.java", m)
+			run(ServiceImplPath, pathPrefix+"/service/impl/"+table.JavaBeanName+"ServiceImpl.java", m)
+			run(ManagerPath, pathPrefix+"/manager/"+table.JavaBeanName+"Manager.java", m)
+			run(ManagerImplPath, pathPrefix+"/manager/impl/"+table.JavaBeanName+"ManagerImpl.java", m)
+			run(MapperPath, pathPrefix+"/dao/"+table.JavaBeanName+"Mapper.java", m)
+			run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/"+table.JavaBeanName+"Mapper.xml", m)
 		}
-		run(vueListPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/list.vue", m)
-		//run(vueEditPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/edit.vue", m)
-		//run(vueDetailPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/detail.vue", m)
+
+		if config.FrontTheme != "None" {
+			err := os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower, os.ModePerm)
+			if err != nil {
+				panic(err)
+			}
+			run(vueListPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/list.vue", m)
+			//run(vueEditPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/edit.vue", m)
+			//run(vueDetailPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/detail.vue", m)
+		}
+
 	}
-	m := make(map[string]interface{})
-	m["tables"] = schema.Tables
-	m["l"] = "{{"
-	m["r"] = "}}"
-	run(vueIndexPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/router/index.js", m)
-	run(vueSidebarPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/common/Sidebar.vue", m)
+	if config.FrontTheme != "None" {
+		m := make(map[string]interface{})
+		m["tables"] = schema.Tables
+		m["l"] = "{{"
+		m["r"] = "}}"
+		run(vueIndexPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/router/index.js", m)
+		run(vueSidebarPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/common/Sidebar.vue", m)
+	}
+
 }
