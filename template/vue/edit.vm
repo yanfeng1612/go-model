@@ -3,16 +3,16 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-date"></i> {{.backendObject.Comment}}</el-breadcrumb-item>
-                <el-breadcrumb-item>编辑${frontendObject.objectDesc}信息</el-breadcrumb-item>
+                <el-breadcrumb-item>编辑{{.backendObject.Comment}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container container-margin">
             <el-input v-model="formData.id" type="hidden" />
-{{.range $i,$field := .backendObject.Columns}}
+{{range $i,$field := .backendObject.Columns}}
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="${column.showName}：" prop="${column.name}">
-                        <el-input v-model="formData.${column.name}" placeholder="${column.showName}"></el-input>
+                    <el-form-item label="{{$field.Comment}}：" prop="{{$field.Comment}}">
+                        <el-input v-model="formData.{{$field.JavaFieldName}}" placeholder="{{$field.JavaFieldName}}"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -27,9 +27,7 @@
 </template>
 
 <script>
-    import {ListUrl} from "../../../assets/common";
-    import {ajaxData} from "../../../assets/api";
-    import {Utils} from "../../../assets/Utils";
+    import {requestData} from "../../../utils/request";
 
     export default {
         name: 'baseform',
@@ -42,14 +40,8 @@
                 oldData: null,
                 isInactive: false,
                 formData: {},
-                rules: {
-#foreach($column in $columns)
-#if(!${column.isIdentityPk})
-                    ${column.name}: [ {required: true, message: '请输入${column.showName}', trigger: 'blur'}]#if($velocityCount!=$columns.size()),#end
-#end
-#end
-        }
-        }
+                rules: {}
+            }
         },
         created() {
             this.getData();
@@ -58,9 +50,9 @@
             getData() {
                 var self = this;
                 if (this.$route.query.id != null) {
-                    ajaxData({
-                        "url": ListUrl.${objectName}Detail,
-                        "data": {id: this.${JQ}route.query.id},
+                    requestData({
+                        "url": "/api/{{.backendObject.JavaBeanNameLower}}/detail",
+                        "data": {id: this.$route.query.id},
                         "callback": function (redata) {
                             self.formData = redata;
                         }
@@ -70,17 +62,17 @@
             toSave() {
                 var self = this;
 
-                this.${JQ}refs["formData"].validate((valid) => {
+                this.$refs["formData"].validate((valid) => {
                     if (valid) {
-                        ajaxData({
-                            "url": ListUrl.${objectName}Edit,
+                        requestData({
+                            "url": "/api/{{.backendObject.JavaBeanNameLower}}/updateById",
                             "data": this.formData
                             , "callback": function (redata) {
-                                self.${JQ}message({
+                                self.$message({
                                     type: 'success',
                                     message: '保存成功!'
                                 });
-                                self.${JQ}router.push({path: '/${objectName}List'});
+                                self.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}List'});
                             }
                         });
 
@@ -88,11 +80,11 @@
                 });
             },
             toCancel() {
-                this.${JQ}router.push({path: '/${objectName}List'});
+                this.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}List'});
             },
             onSubmit: function () {
                 var isValid = false;
-                this.${JQ}refs["formData"].validate((valid) => {
+                this.$refs["formData"].validate((valid) => {
                     if (valid) {
                         isValid = true;
                     } else {

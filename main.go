@@ -337,6 +337,8 @@ func buildDynamic(config Config, schema *utils.Schema) {
 		m := buildCommonMap(config)
 		m["backendObject"] = table
 		m["columnSize"] = len(table.Columns)
+		m["l"] = "{{"
+		m["r"] = "}}"
 
 		if config.BackTheme != "None" {
 			if config.Auto {
@@ -368,8 +370,8 @@ func buildDynamic(config Config, schema *utils.Schema) {
 				panic(err)
 			}
 			run(vueListPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/list.vue", m)
-			//run(vueEditPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/edit.vue", m)
-			//run(vueDetailPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/detail.vue", m)
+			run(vueEditPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/edit.vue", m)
+			run(vueDetailPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/detail.vue", m)
 		}
 
 	}

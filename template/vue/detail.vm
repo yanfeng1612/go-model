@@ -2,37 +2,22 @@
     <el-form :model="ajaxData" ref="ajaxData" label-width="200px" class="demo-ruleForm">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-date"></i> ${frontendObject.objectDesc}</el-breadcrumb-item>
-                <el-breadcrumb-item>${frontendObject.objectDesc}-详情信息</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-date"></i> {{.backendObject.Comment}}</el-breadcrumb-item>
+                <el-breadcrumb-item>{{.backendObject.Comment}}-详情信息</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container container-margin">
-        <el-row>
-#set($JQ="$")
-#foreach($column in $editColumns)
-#if($velocityCount%2==0)
-#set($flag="0")
-                <el-row>
-#end
-                    <el-col :span="8">
-                        <el-form-item label="${column.showName}：" prop="${column.name}">
-#if($column.type == 0)
-                            {{ajaxData.${column.name}}}
-#elseif($column.type == 1)
-#foreach($val in $column.valueList)
-                            <span v-if="ajaxData.${column.name} == '${val.showKey}'">${val.showValue}</span>
-#end
-#end
-                        </el-form-item>
-                    </el-col>
-#if($velocityCount%2==1)
-#set($flag="1")
-                </el-row>
-#end
-#end
-#if(${flag}==0)
+
+{{range $i,$field := .backendObject.Columns}}
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="{{$field.Comment}}：" prop="{{$field.JavaFieldName}}">
+                            {{$.l}}ajaxData.{{$field.JavaFieldName}}}}
+                    </el-form-item>
+                </el-col>
             </el-row>
-#end
+{{end}}
+
         </div>
         <div class="container-margin to-center ">
             <el-button type="primary" @click="cancelDetail()">返回</el-button>
@@ -42,9 +27,7 @@
 </template>
 
 <script>
-    import {ListUrl} from "../../../assets/common";
-    import {ajaxData} from "../../../assets/api";
-    import {Utils} from "../../../assets/Utils";
+   import {requestData} from "../../../utils/request";
 
     export default {
         name: 'baseform',
@@ -66,8 +49,8 @@
                     return;
                 }
                 var reqData = {"id":this.item.id};
-                ajaxData({
-                    "url": ListUrl.${objectName}Detail,
+                requestData({
+                    "url": "/api/{{.backendObject.JavaBeanNameLower}}/detail",
                     "data":reqData,
                     "callback": function (redata) {
                         if(redata == null || redata == undefined) {
@@ -81,7 +64,7 @@
                 console.log(file);
             },
             cancelDetail: function () {
-                this.${JQ}router.push({path: '/${objectName}List'});
+                this.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}List'});
             }
         }
     }

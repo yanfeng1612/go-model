@@ -35,6 +35,16 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/{{$table.JavaBeanNameLower}}/list.vue'),
                     meta: { title: '{{$table.Comment}}' }
                 },
+                {
+                    path: '/{{$table.JavaBeanNameLower}}Edit',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/{{$table.JavaBeanNameLower}}/edit.vue'),
+                    meta: { title: '{{$table.Comment}}' }
+                },
+                {
+                    path: '/{{$table.JavaBeanNameLower}}Detail',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/{{$table.JavaBeanNameLower}}/detail.vue'),
+                    meta: { title: '{{$table.Comment}}' }
+                },
                 {{end}}
                 {
                     path: '/tabs',
