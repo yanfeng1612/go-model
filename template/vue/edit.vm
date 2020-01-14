@@ -2,40 +2,22 @@
     <el-form :rules="rules" :model="formData" ref="formData" label-width="160px" class="demo-ruleForm">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-date"></i> ${frontendObject.objectDesc}</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-date"></i> {{.backendObject.Comment}}</el-breadcrumb-item>
                 <el-breadcrumb-item>编辑${frontendObject.objectDesc}信息</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container container-margin">
             <el-input v-model="formData.id" type="hidden" />
+{{.range $i,$field := .backendObject.Columns}}
             <el-row>
-#set($JQ="$")
-#foreach($column in $editColumns)
-#if($velocityCount%2==0)
-#set($flag="0")
-                <el-row>
-#end
                 <el-col :span="8">
                     <el-form-item label="${column.showName}：" prop="${column.name}">
-#if($column.type == 0)
                         <el-input v-model="formData.${column.name}" placeholder="${column.showName}"></el-input>
-#elseif($column.type == 1)
-                        <el-select v-model="formData.${column.name}" placeholder="请选择">
-#foreach($val in $column.valueList)
-                                <el-option key="${val.showKey}" label="${val.showValue}" :value="${val.showKey}"></el-option>
-#end
-                        </el-select>
-#end
                     </el-form-item>
                 </el-col>
-#if($velocityCount%2==1)
-#set($flag="1")
-                </el-row>
-#end
-#end
-#if(${flag}==0)
             </el-row>
-#end
+{{end}}
+
         </div>
         <div class="container-margin to-center ">
             <el-button type="primary" @click="toSave">保 存</el-button>
@@ -115,7 +97,7 @@
                         isValid = true;
                     } else {
                         isValid = false;
-            }
+                    }
             });
                 return isValid;
             }

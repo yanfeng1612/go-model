@@ -27,6 +27,7 @@ type Config struct {
 	DatabasePassword string        `json:"databasePassword"`
 	TableConfigList  []TableConfig `json:"tableConfigList"`
 	FirstInit        bool          `json:"firstInit"`
+	Auto             bool          `json:"auto"`
 }
 
 type TableConfig struct {
@@ -44,28 +45,28 @@ type Theme struct {
 }
 
 const (
-	ConfigPath             = "D://go//src//github.com//yanfeng1612//go-model//json.txt" // 配置文件路径
-	TemplateRootPath       = "D://go//src//github.com//yanfeng1612//go-model//template" // 模板根路径
-	TemplateJavaRootPath   = TemplateRootPath + "//java"                                // java模板根路径
-	TemplateVueRootPath    = TemplateRootPath + "//vue"                                 // java模板根路径
-	PomPath                = TemplateJavaRootPath + "/utils/pom.vm"                     // pom路径
-	BasicResultPath        = TemplateJavaRootPath + "/utils/BasicResult.vm"             // BasicResultPath路径
-	GenericResultPath      = TemplateJavaRootPath + "/utils/GenericResult.vm"           // GenericResult路径
-	CodeEnumPath           = TemplateJavaRootPath + "/utils/CodeEnum.vm"                // CodeEnumPath路径
-	QueryPath              = TemplateJavaRootPath + "/utils/Query.vm"                   // Query路径
-	PageQueryPath          = TemplateJavaRootPath + "/utils/PageQuery.vm"               // PageQuery路径
-	IdPageQueryPath        = TemplateJavaRootPath + "/utils/IdPageQuery.vm"             // IdPageQuery路径
-	PagenationPath         = TemplateJavaRootPath + "/utils/Pagenation.vm"              // Pagenation路径
-	PageQueryWrapperPath   = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"        // PageQueryWrapper路径
-	ListResultPath         = TemplateJavaRootPath + "/utils/ListResult.vm"              // ListResult路径
-	PageListResultPath     = TemplateJavaRootPath + "/utils/PageListResult.vm"          // PageListResult路径
-	APIEmRequestStatusPath = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm"      // APIEmRequestStatus路径
-	APIMsgCodePath         = TemplateJavaRootPath + "/utils/APIMsgCode.vm"              // APIMsgCode路径
-	ResponsePath           = TemplateJavaRootPath + "/utils/Response.vm"                // Response路径
-	ResponseTemplatePath   = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"        // ResponseTemplate路径
-	CodeConverterPath      = TemplateJavaRootPath + "/utils/CodeConverter.vm"           // CodeConverter路径
-	BootstrapPath          = TemplateJavaRootPath + "/utils/Bootstrap.vm"               // Bootstrap路径
-	ApplicationConfigPath  = TemplateJavaRootPath + "/utils/application.vm"             // application路径
+	ConfigPath             = "D://go//src//github.com//yanfeng1612//go-model//go-model.json" // 配置文件路径
+	TemplateRootPath       = "D://go//src//github.com//yanfeng1612//go-model//template"      // 模板根路径
+	TemplateJavaRootPath   = TemplateRootPath + "//java"                                     // java模板根路径
+	TemplateVueRootPath    = TemplateRootPath + "//vue"                                      // java模板根路径
+	PomPath                = TemplateJavaRootPath + "/utils/pom.vm"                          // pom路径
+	BasicResultPath        = TemplateJavaRootPath + "/utils/BasicResult.vm"                  // BasicResultPath路径
+	GenericResultPath      = TemplateJavaRootPath + "/utils/GenericResult.vm"                // GenericResult路径
+	CodeEnumPath           = TemplateJavaRootPath + "/utils/CodeEnum.vm"                     // CodeEnumPath路径
+	QueryPath              = TemplateJavaRootPath + "/utils/Query.vm"                        // Query路径
+	PageQueryPath          = TemplateJavaRootPath + "/utils/PageQuery.vm"                    // PageQuery路径
+	IdPageQueryPath        = TemplateJavaRootPath + "/utils/IdPageQuery.vm"                  // IdPageQuery路径
+	PagenationPath         = TemplateJavaRootPath + "/utils/Pagenation.vm"                   // Pagenation路径
+	PageQueryWrapperPath   = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"             // PageQueryWrapper路径
+	ListResultPath         = TemplateJavaRootPath + "/utils/ListResult.vm"                   // ListResult路径
+	PageListResultPath     = TemplateJavaRootPath + "/utils/PageListResult.vm"               // PageListResult路径
+	APIEmRequestStatusPath = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm"           // APIEmRequestStatus路径
+	APIMsgCodePath         = TemplateJavaRootPath + "/utils/APIMsgCode.vm"                   // APIMsgCode路径
+	ResponsePath           = TemplateJavaRootPath + "/utils/Response.vm"                     // Response路径
+	ResponseTemplatePath   = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"             // ResponseTemplate路径
+	CodeConverterPath      = TemplateJavaRootPath + "/utils/CodeConverter.vm"                // CodeConverter路径
+	BootstrapPath          = TemplateJavaRootPath + "/utils/Bootstrap.vm"                    // Bootstrap路径
+	ApplicationConfigPath  = TemplateJavaRootPath + "/utils/application.vm"                  // application路径
 
 	PojoPath        = TemplateJavaRootPath + "/pojo.vm"        // pojo路径
 	PojoQueryPath   = TemplateJavaRootPath + "/pojoQuery.vm"   // pojoQuery路径
@@ -88,6 +89,8 @@ func main() {
 	configPath := ConfigPath
 	if len(args) > 1 {
 		configPath = args[1]
+	} else {
+
 	}
 	jsonTxt, err := ioutil.ReadFile(configPath)
 	if err != nil {
@@ -159,37 +162,57 @@ func prepare(config Config) {
 		if err != nil {
 			panic("创建utils文件夹失败!" + err.Error())
 		}
-		err = os.MkdirAll(path+"/pojo/", os.ModePerm)
-		if err != nil {
-			panic("创建pojo文件夹失败!" + err.Error())
+
+		pathSlice := []string{path + "/domain/auto/", path + "/domain/custom/",
+			path + "/controller/auto/", path + "/controller/custom/",
+			path + "/service/auto/", path + "/service/custom/",
+			path + "/service/impl/auto/", path + "/service/impl/custom/",
+			path + "/manager/auto/", path + "/manager/custom/",
+			path + "/manager/impl/auto/", path + "/manager/impl/custom/",
+			path + "/dao/auto/", path + "/dao/custom/",
+			config.ExportPath + "/" + config.ProjectName + "/src/main/resources/mapper/auto/", config.ExportPath + "/" + config.ProjectName + "/src/main/resources/mapper/custom/",
 		}
-		err = os.MkdirAll(path+"/controller/", os.ModePerm)
-		if err != nil {
-			panic("创建controller失败")
-		}
-		err = os.MkdirAll(path+"/service/", os.ModePerm)
-		if err != nil {
-			panic("创建service文件夹失败!" + err.Error())
-		}
-		err = os.MkdirAll(path+"/service/impl/", os.ModePerm)
-		if err != nil {
-			panic("创建serviceImpl文件夹失败!" + err.Error())
-		}
-		err = os.MkdirAll(path+"/manager/", os.ModePerm)
-		if err != nil {
-			panic("创建manager文件夹失败!" + err.Error())
-		}
-		err = os.MkdirAll(path+"/manager/impl/", os.ModePerm)
-		if err != nil {
-			panic("创建managerImpl文件夹失败!" + err.Error())
-		}
-		err = os.MkdirAll(path+"/dao/", os.ModePerm)
-		if err != nil {
-			panic("创建dao文件夹失败!" + err.Error())
-		}
-		err = os.MkdirAll(config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/", os.ModePerm)
-		if err != nil {
-			panic("创建mapperXml文件夹失败!" + err.Error())
+
+		if config.Auto {
+			for _, p := range pathSlice {
+				err = os.MkdirAll(p, os.ModePerm)
+				if err != nil {
+					panic("创建文件夹失败!" + err.Error())
+				}
+			}
+		} else {
+			err = os.MkdirAll(path+"/domain/", os.ModePerm)
+			if err != nil {
+				panic("创建pojo文件夹失败!" + err.Error())
+			}
+			err = os.MkdirAll(path+"/controller/", os.ModePerm)
+			if err != nil {
+				panic("创建controller失败")
+			}
+			err = os.MkdirAll(path+"/service/", os.ModePerm)
+			if err != nil {
+				panic("创建service文件夹失败!" + err.Error())
+			}
+			err = os.MkdirAll(path+"/service/impl/", os.ModePerm)
+			if err != nil {
+				panic("创建serviceImpl文件夹失败!" + err.Error())
+			}
+			err = os.MkdirAll(path+"/manager/", os.ModePerm)
+			if err != nil {
+				panic("创建manager文件夹失败!" + err.Error())
+			}
+			err = os.MkdirAll(path+"/manager/impl/", os.ModePerm)
+			if err != nil {
+				panic("创建managerImpl文件夹失败!" + err.Error())
+			}
+			err = os.MkdirAll(path+"/dao/", os.ModePerm)
+			if err != nil {
+				panic("创建dao文件夹失败!" + err.Error())
+			}
+			err = os.MkdirAll(config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/", os.ModePerm)
+			if err != nil {
+				panic("创建mapperXml文件夹失败!" + err.Error())
+			}
 		}
 	}
 
@@ -208,7 +231,6 @@ func prepare(config Config) {
 			panic("创建admin静态资源文件失败")
 		}
 	}
-
 }
 
 func buildUtils(config Config) {
@@ -317,15 +339,27 @@ func buildDynamic(config Config, schema *utils.Schema) {
 		m["columnSize"] = len(table.Columns)
 
 		if config.BackTheme != "None" {
-			run(PojoPath, pathPrefix+"/pojo/"+table.JavaBeanName+".java", m)
-			run(ControllerPath, pathPrefix+"/controller/"+table.JavaBeanName+"Controller.java", m)
-			run(PojoQueryPath, pathPrefix+"/pojo/"+table.JavaBeanName+"Query.java", m)
-			run(ServicePath, pathPrefix+"/service/"+table.JavaBeanName+"Service.java", m)
-			run(ServiceImplPath, pathPrefix+"/service/impl/"+table.JavaBeanName+"ServiceImpl.java", m)
-			run(ManagerPath, pathPrefix+"/manager/"+table.JavaBeanName+"Manager.java", m)
-			run(ManagerImplPath, pathPrefix+"/manager/impl/"+table.JavaBeanName+"ManagerImpl.java", m)
-			run(MapperPath, pathPrefix+"/dao/"+table.JavaBeanName+"Mapper.java", m)
-			run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/"+table.JavaBeanName+"Mapper.xml", m)
+			if config.Auto {
+				run(PojoPath, pathPrefix+"/domain/auto/"+table.JavaBeanName+".java", m)
+				run(PojoQueryPath, pathPrefix+"/domain/auto/"+table.JavaBeanName+"Query.java", m)
+				run(ControllerPath, pathPrefix+"/controller/auto/"+table.JavaBeanName+"Controller.java", m)
+				run(ServicePath, pathPrefix+"/service/auto/"+table.JavaBeanName+"Service.java", m)
+				run(ServiceImplPath, pathPrefix+"/service/impl/auto/"+table.JavaBeanName+"ServiceImpl.java", m)
+				run(ManagerPath, pathPrefix+"/manager/auto/"+table.JavaBeanName+"Manager.java", m)
+				run(ManagerImplPath, pathPrefix+"/manager/impl/auto/"+table.JavaBeanName+"ManagerImpl.java", m)
+				run(MapperPath, pathPrefix+"/dao/auto/"+table.JavaBeanName+"Mapper.java", m)
+				run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/"+table.JavaBeanName+"Mapper.xml", m)
+			} else {
+				run(PojoPath, pathPrefix+"/domain/"+table.JavaBeanName+".java", m)
+				run(ControllerPath, pathPrefix+"/controller/"+table.JavaBeanName+"Controller.java", m)
+				run(PojoQueryPath, pathPrefix+"/domain/"+table.JavaBeanName+"Query.java", m)
+				run(ServicePath, pathPrefix+"/service/"+table.JavaBeanName+"Service.java", m)
+				run(ServiceImplPath, pathPrefix+"/service/impl/"+table.JavaBeanName+"ServiceImpl.java", m)
+				run(ManagerPath, pathPrefix+"/manager/"+table.JavaBeanName+"Manager.java", m)
+				run(ManagerImplPath, pathPrefix+"/manager/impl/"+table.JavaBeanName+"ManagerImpl.java", m)
+				run(MapperPath, pathPrefix+"/dao/"+table.JavaBeanName+"Mapper.java", m)
+				run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/"+table.JavaBeanName+"Mapper.xml", m)
+			}
 		}
 
 		if config.FrontTheme != "None" {

@@ -17,6 +17,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: {{.config.PackageName}}.domain
 
 #设置静态资源路径，多个以逗号分隔
 spring.resources.static-locations: classpath:static/,file:static/

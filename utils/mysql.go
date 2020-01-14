@@ -167,6 +167,8 @@ func convertJavaFieldType(t string) string {
 		result = "Date"
 	case "timestamp":
 		result = "Date"
+	case "decimal":
+		result = "BigDecimal"
 	}
 	return result
 }

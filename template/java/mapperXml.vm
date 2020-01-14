@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
+{{if eq .config.Auto true}}
+<mapper namespace="{{.config.PackageName}}.dao.auto.{{.backendObject.JavaBeanName}}Mapper">
+{{else}}
 <mapper namespace="{{.config.PackageName}}.dao.{{.backendObject.JavaBeanName}}Mapper">
+{{end}}
 
-    <resultMap id="baseResultMap" type="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}">
+    {{if eq .config.Auto true}}
+    <resultMap id="baseResultMap" type="{{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}">
+    {{else}}
+    <resultMap id="baseResultMap" type="{{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}">
+    {{end}}
         {{range $i,$field := .backendObject.Columns}}<result property="{{$field.JavaFieldName}}" column="{{$field.Name}}" />
         {{end}}
     </resultMap>
@@ -68,7 +76,7 @@
         </trim>
     </sql>
 
-    <insert id="insert" parameterType="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    <insert id="insert" parameterType="{{.backendObject.JavaBeanName}}"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         /* {{.backendObject.Comment}} */
         INSERT  INTO  {{.backendObject.Name}}
         (
@@ -100,7 +108,7 @@
         DELETE FROM {{.backendObject.Name}} WHERE id = #{id}
     </delete>
 
-    <update id="update" parameterType="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}" >
+    <update id="update" parameterType="{{.backendObject.JavaBeanName}}" >
         UPDATE  {{.backendObject.Name}}
         /* {{.backendObject.Comment}} */
         <trim prefix="SET" prefixOverrides=",">
@@ -116,7 +124,7 @@
         id = #{id}		/* id */
     </update>
 
-    <select id="findById" parameterType="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}"  resultMap="baseResultMap">
+    <select id="findById" parameterType="{{.backendObject.JavaBeanName}}"  resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
         FROM   {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
@@ -173,7 +181,7 @@
 
     {{range $i,$field := .backendObject.Columns}}
         {{if eq $field.SingleQuery 1}}
-            <select id="search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}" parameterType="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}" resultMap="baseResultMap">
+            <select id="search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}" parameterType="{{.backendObject.JavaBeanName}}" resultMap="baseResultMap">
                     SELECT
                     <include refid="queryColumns" />
                     FROM {{.backendObject.Name}} /* {{.backendObject.Comment}} */
@@ -185,7 +193,7 @@
 
     {{range $i,$field := .backendObject.Columns}}
         {{if eq $field.SingleQuery 1}}
-            <select id="search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}" parameterType="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}" resultMap="baseResultMap">
+            <select id="search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}" parameterType="{{.backendObject.JavaBeanName}}" resultMap="baseResultMap">
                     SELECT
                     <include refid="queryColumns" />
                     FROM {{.backendObject.Name}} /* {{.backendObject.Comment}} */
@@ -197,7 +205,7 @@
 
     {{range $i,$field := .backendObject.Columns}}
         {{if eq $field.WhereUpdateField 1}}
-            <update id="update${backendObject.javaBeanName}By${field.JavaFieldNameUF}" parameterType="{{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}" >
+            <update id="update${backendObject.javaBeanName}By${field.JavaFieldNameUF}" parameterType="{{.backendObject.JavaBeanName}}" >
                     UPDATE  {{.backendObject.Name}}
                     <trim prefix="SET" suffixOverrides=",">
                     {{range $i,$field := .backendObject.Columns}}

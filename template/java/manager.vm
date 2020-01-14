@@ -1,9 +1,19 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.manager.auto;
+{{else}}
 package {{.config.PackageName}}.manager;
+{{end}}
 
 import java.util.List;
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}};
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}Query;
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
 import {{.config.PackageName}}.utils.*;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.utils.*;
+{{end}}
 
 /**
  * {{.backendObject.Comment}}

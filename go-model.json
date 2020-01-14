@@ -1,6 +1,7 @@
 {
     "backTheme" : "SpringCloud",
-    "frontTheme" : "None"
+    "auto" : false,
+    "frontTheme" : "Vue",
     "projectName" : "demo",
     "projectAdminName" : "demo-admin",
     "packageName" : "com.demo",

@@ -1,4 +1,8 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.service.auto;
+{{else}}
 package {{.config.PackageName}}.service;
+{{end}}
 
 import java.util.List;
 import java.util.Date;
@@ -6,15 +10,15 @@ import java.math.BigDecimal;
 
 import lombok.Data;
 
-import {{.config.PackageName}}.utils.BasicResult;
-import {{.config.PackageName}}.utils.GenericResult;
-import {{.config.PackageName}}.utils.Query;
-import {{.config.PackageName}}.utils.PageQuery;
-import {{.config.PackageName}}.utils.IdPageQuery;
-import {{.config.PackageName}}.utils.ListResult;
-import {{.config.PackageName}}.utils.PageListResult;
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}};
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.utils.*;
+
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
+{{end}}
 
 /**
  * {{.backendObject.Comment}}

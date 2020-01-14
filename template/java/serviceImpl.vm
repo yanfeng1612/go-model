@@ -1,4 +1,8 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.service.impl.auto;
+{{else}}
 package {{.config.PackageName}}.service.impl;
+{{end}}
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,10 +16,17 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.dao.DuplicateKeyException;
 
 import {{.config.PackageName}}.utils.*;
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}};
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}Query;
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.manager.auto.{{.backendObject.JavaBeanName}}Manager;
+import {{.config.PackageName}}.service.auto.{{.backendObject.JavaBeanName}}Service;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
 import {{.config.PackageName}}.manager.{{.backendObject.JavaBeanName}}Manager;
 import {{.config.PackageName}}.service.{{.backendObject.JavaBeanName}}Service;
+{{end}}
 
 /**
  * {{.backendObject.Comment}}

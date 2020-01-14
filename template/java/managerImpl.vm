@@ -1,4 +1,8 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.manager.impl.auto;
+{{else}}
 package {{.config.PackageName}}.manager.impl;
+{{end}}
 
 import java.util.List;
 import java.util.Date;
@@ -10,10 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}};
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}Query;
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.dao.auto.{{.backendObject.JavaBeanName}}Mapper;
+import {{.config.PackageName}}.manager.auto.{{.backendObject.JavaBeanName}}Manager;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
 import {{.config.PackageName}}.dao.{{.backendObject.JavaBeanName}}Mapper;
 import {{.config.PackageName}}.manager.{{.backendObject.JavaBeanName}}Manager;
+{{end}}
 import {{.config.PackageName}}.utils.*;
 
 /**

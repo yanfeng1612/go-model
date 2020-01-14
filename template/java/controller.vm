@@ -1,7 +1,10 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.controller.auto;
+{{else}}
 package {{.config.PackageName}}.controller;
+{{end}}
 
 import java.util.Date;
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,16 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 
 import {{.config.PackageName}}.utils.*;
 
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}};
-import {{.config.PackageName}}.pojo.{{.backendObject.JavaBeanName}}Query;
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.service.auto.{{.backendObject.JavaBeanName}}Service;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
 import {{.config.PackageName}}.service.{{.backendObject.JavaBeanName}}Service;
+{{end}}
 
 /**
  * {{.backendObject.Comment}}
