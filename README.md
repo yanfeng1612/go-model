@@ -34,7 +34,7 @@ git clone https://github.com/yanfeng1612/go-model.git
 cd go-model         // 进入目录
 go build            // 项目使用golang,依赖go语言环境
 
-./go-model
+./go-model d:\\go-model.json
 ```
 
 ## 关于配置
