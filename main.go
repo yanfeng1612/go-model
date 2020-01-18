@@ -340,6 +340,7 @@ func buildDynamic(config Config, schema *utils.Schema) {
 		m["columnSize"] = len(table.Columns)
 		m["l"] = "{{"
 		m["r"] = "}}"
+		m["l1"] = "{"
 
 		if config.BackTheme != "None" {
 			if config.Auto {

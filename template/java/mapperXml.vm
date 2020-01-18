@@ -115,7 +115,7 @@
         {{range $i,$field := .backendObject.Columns}}
         {{if eq $field.UpdateField 1}}
             <if test="{{$field.JavaFieldName}} != null">
-                ,{{$field.Name}} = #{{$field.JavaFieldName}} /* {{$field.Comment}} */
+                ,{{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}} /* {{$field.Comment}} */
             </if>
         {{end}}
         {{end}}
