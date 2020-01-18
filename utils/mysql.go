@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"strconv"
 	"strings"
 )
 
@@ -57,7 +58,9 @@ func ParseSql(txt string) Schema {
 }
 
 func ParseSqlFromMySqlSchema(ip string, port int, username string, password string, databaseName string) *Schema {
-	db, _ := sql.Open("mysql", username+":"+password+"@/"+databaseName+"?charset=utf8")
+	url := username+":"+password+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+databaseName+"?charset=utf8"
+	fmt.Println(url)
+	db, _ := sql.Open("mysql", url)
 	rows, err := db.Query("SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?", databaseName)
 	if err != nil {
 		panic(err)
@@ -154,6 +157,8 @@ func convertJavaFieldType(t string) string {
 	result := ""
 	switch t {
 	case "tinyint":
+		result = "Integer"
+	case "smallint":
 		result = "Integer"
 	case "int":
 		result = "Integer"

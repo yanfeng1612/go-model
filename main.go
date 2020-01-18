@@ -45,28 +45,28 @@ type Theme struct {
 }
 
 const (
-	ConfigPath             = "D://go//src//github.com//yanfeng1612//go-model//go-model.json" // 配置文件路径
-	TemplateRootPath       = "D://go//src//github.com//yanfeng1612//go-model//template"      // 模板根路径
-	TemplateJavaRootPath   = TemplateRootPath + "//java"                                     // java模板根路径
-	TemplateVueRootPath    = TemplateRootPath + "//vue"                                      // java模板根路径
-	PomPath                = TemplateJavaRootPath + "/utils/pom.vm"                          // pom路径
-	BasicResultPath        = TemplateJavaRootPath + "/utils/BasicResult.vm"                  // BasicResultPath路径
-	GenericResultPath      = TemplateJavaRootPath + "/utils/GenericResult.vm"                // GenericResult路径
-	CodeEnumPath           = TemplateJavaRootPath + "/utils/CodeEnum.vm"                     // CodeEnumPath路径
-	QueryPath              = TemplateJavaRootPath + "/utils/Query.vm"                        // Query路径
-	PageQueryPath          = TemplateJavaRootPath + "/utils/PageQuery.vm"                    // PageQuery路径
-	IdPageQueryPath        = TemplateJavaRootPath + "/utils/IdPageQuery.vm"                  // IdPageQuery路径
-	PagenationPath         = TemplateJavaRootPath + "/utils/Pagenation.vm"                   // Pagenation路径
-	PageQueryWrapperPath   = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"             // PageQueryWrapper路径
-	ListResultPath         = TemplateJavaRootPath + "/utils/ListResult.vm"                   // ListResult路径
-	PageListResultPath     = TemplateJavaRootPath + "/utils/PageListResult.vm"               // PageListResult路径
-	APIEmRequestStatusPath = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm"           // APIEmRequestStatus路径
-	APIMsgCodePath         = TemplateJavaRootPath + "/utils/APIMsgCode.vm"                   // APIMsgCode路径
-	ResponsePath           = TemplateJavaRootPath + "/utils/Response.vm"                     // Response路径
-	ResponseTemplatePath   = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"             // ResponseTemplate路径
-	CodeConverterPath      = TemplateJavaRootPath + "/utils/CodeConverter.vm"                // CodeConverter路径
-	BootstrapPath          = TemplateJavaRootPath + "/utils/Bootstrap.vm"                    // Bootstrap路径
-	ApplicationConfigPath  = TemplateJavaRootPath + "/utils/application.vm"                  // application路径
+	//TemplateRootPath       = "D://go//src//github.com//yanfeng1612//go-model//template" // 模板根路径
+	TemplateRootPath       = "template"                                            // 模板根路径
+	TemplateJavaRootPath   = TemplateRootPath + "/java"                            // java模板根路径
+	TemplateVueRootPath    = TemplateRootPath + "/vue"                             // java模板根路径
+	PomPath                = TemplateJavaRootPath + "/utils/pom.vm"                // pom路径
+	BasicResultPath        = TemplateJavaRootPath + "/utils/BasicResult.vm"        // BasicResultPath路径
+	GenericResultPath      = TemplateJavaRootPath + "/utils/GenericResult.vm"      // GenericResult路径
+	CodeEnumPath           = TemplateJavaRootPath + "/utils/CodeEnum.vm"           // CodeEnumPath路径
+	QueryPath              = TemplateJavaRootPath + "/utils/Query.vm"              // Query路径
+	PageQueryPath          = TemplateJavaRootPath + "/utils/PageQuery.vm"          // PageQuery路径
+	IdPageQueryPath        = TemplateJavaRootPath + "/utils/IdPageQuery.vm"        // IdPageQuery路径
+	PagenationPath         = TemplateJavaRootPath + "/utils/Pagenation.vm"         // Pagenation路径
+	PageQueryWrapperPath   = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"   // PageQueryWrapper路径
+	ListResultPath         = TemplateJavaRootPath + "/utils/ListResult.vm"         // ListResult路径
+	PageListResultPath     = TemplateJavaRootPath + "/utils/PageListResult.vm"     // PageListResult路径
+	APIEmRequestStatusPath = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm" // APIEmRequestStatus路径
+	APIMsgCodePath         = TemplateJavaRootPath + "/utils/APIMsgCode.vm"         // APIMsgCode路径
+	ResponsePath           = TemplateJavaRootPath + "/utils/Response.vm"           // Response路径
+	ResponseTemplatePath   = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"   // ResponseTemplate路径
+	CodeConverterPath      = TemplateJavaRootPath + "/utils/CodeConverter.vm"      // CodeConverter路径
+	BootstrapPath          = TemplateJavaRootPath + "/utils/Bootstrap.vm"          // Bootstrap路径
+	ApplicationConfigPath  = TemplateJavaRootPath + "/utils/application.vm"        // application路径
 
 	PojoPath        = TemplateJavaRootPath + "/pojo.vm"        // pojo路径
 	PojoQueryPath   = TemplateJavaRootPath + "/pojoQuery.vm"   // pojoQuery路径
@@ -86,11 +86,11 @@ const (
 
 func main() {
 	args := os.Args
-	configPath := ConfigPath
+	var configPath string
 	if len(args) > 1 {
 		configPath = args[1]
 	} else {
-
+		configPath = "go-model.json"
 	}
 	jsonTxt, err := ioutil.ReadFile(configPath)
 	if err != nil {
@@ -311,6 +311,7 @@ func run(templatePath, outputPath string, m map[string]interface{}) {
 
 func buildCommon(templatePath string) *template.Template {
 	textByte, err := ioutil.ReadFile(templatePath)
+	//textByte, err := utils.Asset(templatePath)
 	if err != nil {
 		panic(err)
 	}

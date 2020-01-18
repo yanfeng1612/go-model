@@ -43,7 +43,7 @@ func CopyDir(srcPath string, destPath string) error {
 			path := strings.Replace(path, "\\", "/", -1)
 			srcPath := strings.Replace(srcPath, "//", "/", -1)
 			destNewPath := strings.Replace(path, srcPath, destPath, -1)
-			fmt.Println("复制文件:" + path + " 到 " + destNewPath)
+			//fmt.Println("复制文件:" + path + " 到 " + destNewPath)
 			copyFile(path, destNewPath)
 		}
 		return nil
