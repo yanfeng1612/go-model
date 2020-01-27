@@ -48,7 +48,7 @@
         },
         methods: {
             getData() {
-                var self = this;
+                let self = this;
                 if (this.$route.query.id != null) {
                     requestData({
                         "url": "/api/{{.backendObject.JavaBeanNameLower}}/detail",
@@ -60,12 +60,12 @@
                 }
             },
             toSave() {
-                var self = this;
+                let self = this;
 
                 this.$refs["formData"].validate((valid) => {
                     if (valid) {
                         requestData({
-                            "url": "/api/{{.backendObject.JavaBeanNameLower}}/updateById",
+                            "url": "/api/{{.backendObject.JavaBeanNameLower}}/addOrUpdate",
                             "data": this.formData
                             , "callback": function (redata) {
                                 self.$message({

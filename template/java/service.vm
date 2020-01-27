@@ -43,6 +43,12 @@ public interface {{.backendObject.JavaBeanName}}Service {
      *
      * @generated
      */
+    BasicResult addOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @generated
+     */
     BasicResult deleteById(long id);
 
     /**
@@ -61,7 +67,7 @@ public interface {{.backendObject.JavaBeanName}}Service {
      *
      * @generated
      */
-    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}ById({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}ById(Long id);
 
     /**
      *

@@ -100,6 +100,36 @@ public class {{.backendObject.JavaBeanName}}ServiceImpl implements {{.backendObj
      * @generated
      */
     @Override
+    public BasicResult addOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
+        LOG.info("request {{.backendObject.JavaBeanName}}ServiceImpl.addOrUpdate param:" + JSON.toJSONString({{.backendObject.JavaBeanNameLower}}));
+        BasicResult result = new BasicResult();
+        try {
+            if ({{.backendObject.JavaBeanNameLower}} != null) {
+                {{.backendObject.JavaBeanNameLower}}ManagerImpl.insertOrUpdate({{.backendObject.JavaBeanNameLower}});
+                result.setCode(CodeEnum.SUCCESS.getCode());
+                result.setMsg("保存成功");
+            } else {
+                result.setCode(CodeEnum.FAILED.getCode());
+                result.setMsg("{{.backendObject.JavaBeanNameLower}} is null");
+                LOG.error("------{{.backendObject.JavaBeanName}}ServiceImpl.add{{.backendObject.JavaBeanName}} - {{.backendObject.JavaBeanNameLower}} is null!");
+            }
+        } catch (DuplicateKeyException e) {
+            result.setCode(CodeEnum.DUPLICATE.getCode());
+            result.setMsg(CodeEnum.DUPLICATE.getMessage());
+            LOG.error("------{{.backendObject.JavaBeanName}}ServiceImpl.add{{.backendObject.JavaBeanName}} 异常",e);
+        } catch (Exception e) {
+            result.setCode(CodeEnum.FAILED.getCode());
+            result.setMsg("未知异常" + e.getMessage());
+            LOG.error("------{{.backendObject.JavaBeanName}}ServiceImpl.add{{.backendObject.JavaBeanName}} 异常",e);
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
     public BasicResult deleteById(long id){
         LOG.info("request {{.backendObject.JavaBeanName}}ServiceImpl.deleteBy param:{}",id);
         BasicResult result = new BasicResult();
@@ -183,9 +213,9 @@ public class {{.backendObject.JavaBeanName}}ServiceImpl implements {{.backendObj
      * @generated
      */
     @Override
-    public {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}ById({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}){
+    public {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}ById(Long id){
         try {
-            return {{.backendObject.JavaBeanNameLower}}ManagerImpl.findById({{.backendObject.JavaBeanNameLower}});
+            return {{.backendObject.JavaBeanNameLower}}ManagerImpl.findById(id);
         } catch (Exception e) {
             LOG.error("------{{.backendObject.JavaBeanName}}ServiceImpl.search{{.backendObject.JavaBeanName}}ByPriKey 异常", e);
         }

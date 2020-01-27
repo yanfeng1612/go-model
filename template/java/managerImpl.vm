@@ -63,6 +63,15 @@ public class {{.backendObject.JavaBeanName}}ManagerImpl implements {{.backendObj
      * @generated
      */
     @Override
+    public int insertOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}){
+        return {{.backendObject.JavaBeanNameLower}}Mapper.insertOrUpdate({{.backendObject.JavaBeanNameLower}});
+    }
+
+    /**
+     *
+     * @generated
+     */
+    @Override
     public int deleteById(long id){
         return {{.backendObject.JavaBeanNameLower}}Mapper.deleteById(id);
     }
@@ -92,8 +101,8 @@ public class {{.backendObject.JavaBeanName}}ManagerImpl implements {{.backendObj
     }
 
     @Override
-    public {{.backendObject.JavaBeanName}} findById({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}){
-        return {{.backendObject.JavaBeanNameLower}}Mapper.findById({{.backendObject.JavaBeanNameLower}});
+    public {{.backendObject.JavaBeanName}} findById(Long id){
+        return {{.backendObject.JavaBeanNameLower}}Mapper.findById(id);
     }
 
     /**

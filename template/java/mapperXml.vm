@@ -19,7 +19,7 @@
     <sql id="queryColumns">
         <trim prefixOverrides=",">
         {{range $i,$field := .backendObject.Columns}}
-            ,{{$field.Name}}	/* {{$field.Comment}} */
+            ,{{$field.Name}}
         {{end}}
         </trim>
     </sql>
@@ -29,11 +29,11 @@
         {{range $i,$field := .backendObject.Columns}}
         {{if eq $field.JavaFieldType "String"}}
             <if test="query.{{$field.JavaFieldName}} != null and query.{{$field.JavaFieldName}} != ''">
-                and {{$field.Name}} = #{query.{{$field.JavaFieldName}}} /* {{$field.Comment}} */
+                and {{$field.Name}} = #{query.{{$field.JavaFieldName}}}
             </if>
         {{else}}
             <if test="query.{{$field.JavaFieldName}} != null">
-                and {{$field.Name}} = #{query.{{$field.JavaFieldName}}} /* {{$field.Comment}} */
+                and {{$field.Name}} = #{query.{{$field.JavaFieldName}}}
             </if>
         {{end}}
         {{if eq $field.InListQuery 1}}
@@ -46,10 +46,10 @@
         {{end}}
         {{if eq $field.SingleQuery 1}}
             <if test="query.{{$field.JavaFieldName}}Start != null">
-                and {{$field.Name}} &gt;= #{query.{{$field.JavaFieldName}}Start} /* {{$field.Comment}}Start */
+                and {{$field.Name}} &gt;= #{query.{{$field.JavaFieldName}}Start}
             </if>
             <if test="query.{{$field.JavaFieldName}}End != null">
-                and {{$field.Name}} &lt;= #{query.{{$field.JavaFieldName}}End} /* {{$field.Comment}}End */
+                and {{$field.Name}} &lt;= #{query.{{$field.JavaFieldName}}End}
             </if>
         {{end}}
         {{end}}
@@ -60,7 +60,7 @@
         <trim prefixOverrides=",">
         {{range $i,$field := .backendObject.Columns}}
         <if test="{{$field.JavaFieldName}} != null">
-            ,{{$field.Name}} /* {{$field.Comment}} */
+            ,{{$field.Name}}
         </if>
         {{end}}
         </trim>
@@ -70,7 +70,7 @@
         <trim prefixOverrides=",">
         {{range $i,$field := .backendObject.Columns}}
         <if test="{{$field.JavaFieldName}} != null">
-            ,#{{$field.JavaFieldName}} /* {{$field.Comment}} */
+            ,#{{$.l1}}{{$field.JavaFieldName}}}
         </if>
         {{end}}
         </trim>
@@ -104,6 +104,24 @@
         </foreach>
     </insert>
 
+    <insert id="insertOrUpdate" parameterType="{{.backendObject.JavaBeanName}}"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        /* {{.backendObject.Comment}} */
+        INSERT  INTO  {{.backendObject.Name}}
+        (
+            <include refid="getInsertField" />
+        )
+        VALUES (
+            <include refid="getInsertFieldValue" />
+        ) ON DUPLICATE KEY
+        <trim prefix="UPDATE" suffixOverrides=",">
+            {{range $i,$field := .backendObject.Columns}}
+                {{if eq $field.UpdateField 1}}
+                    {{$field.Name}} = VALUES({{$field.Name}}),
+                {{end}}
+            {{end}}
+        </trim>
+    </insert>
+
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM {{.backendObject.Name}} WHERE id = #{id}
     </delete>
@@ -115,27 +133,27 @@
         {{range $i,$field := .backendObject.Columns}}
         {{if eq $field.UpdateField 1}}
             <if test="{{$field.JavaFieldName}} != null">
-                ,{{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}} /* {{$field.Comment}} */
+                ,{{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}}
             </if>
         {{end}}
         {{end}}
         </trim>
         WHERE
-        id = #{id}		/* id */
+        id = #{id}
     </update>
 
-    <select id="findById" parameterType="{{.backendObject.JavaBeanName}}"  resultMap="baseResultMap">
+    <select id="findById" parameterType="java.lang.Long" resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM   {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
+        FROM  {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
         WHERE
-        id = #{id}		/* id */
+        id = #{id}
     </select>
 
     <select id="getAllList" parameterType="{{.config.PackageName}}.utils.Query"  resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM    {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
+        FROM {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
         WHERE 1 = 1
         <include refid="wherecontation"/>
         ORDER BY id DESC

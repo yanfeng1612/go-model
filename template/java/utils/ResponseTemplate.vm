@@ -54,8 +54,8 @@ public enum ResponseTemplate {
 
     public abstract <T> Response<T> getResponse(T data);
 
-    public static <T> Response getResponse(APIMsgCode apiMsgCode, T data) {
-        Response response = new Response();
+    public static <T> Response<T> getResponse(APIMsgCode apiMsgCode, T data) {
+        Response<T> response = new Response<>();
         response.setCode(apiMsgCode.getCode());
         response.setMessage(apiMsgCode.getValue());
         if (APIMsgCode.SUCCESS.getCode().equals(apiMsgCode.getCode())) {

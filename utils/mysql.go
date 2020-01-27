@@ -58,8 +58,7 @@ func ParseSql(txt string) Schema {
 }
 
 func ParseSqlFromMySqlSchema(ip string, port int, username string, password string, databaseName string) *Schema {
-	url := username+":"+password+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+databaseName+"?charset=utf8"
-	fmt.Println(url)
+	url := username + ":" + password + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + databaseName + "?charset=utf8"
 	db, _ := sql.Open("mysql", url)
 	rows, err := db.Query("SELECT TABLE_NAME,TABLE_COMMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = ?", databaseName)
 	if err != nil {
@@ -95,7 +94,7 @@ func ParseSqlFromMySqlSchema(ip string, port int, username string, password stri
 			panic(err)
 		}
 		updateField := 1
-		if name == "created_time" || name == "modified_time" {
+		if name == "id" || name == "created_time" || name == "modified_time" {
 			updateField = 0
 		}
 		column := Column{
@@ -156,23 +155,51 @@ func convertJavaFieldName(tableName string) string {
 func convertJavaFieldType(t string) string {
 	result := ""
 	switch t {
+	case "bit":
+		result = "Integer"
 	case "tinyint":
 		result = "Integer"
 	case "smallint":
+		result = "Integer"
+	case "mediumint":
 		result = "Integer"
 	case "int":
 		result = "Integer"
 	case "bigint":
 		result = "Long"
+	case "char":
+		result = "String"
 	case "varchar":
 		result = "String"
+	case "tinytext":
+		result = "String"
+	case "text":
+		result = "String"
+	case "mediumtext":
+		result = "String"
+	case "longtext":
+		result = "String"
+	case "tinyblob":
+		result = "String"
+	case "blob":
+		result = "String"
+	case "mediumblob":
+		result = "String"
+	case "longblob":
+		result = "String"
 	case "date":
+		result = "Date"
+	case "time":
 		result = "Date"
 	case "datetime":
 		result = "Date"
 	case "timestamp":
 		result = "Date"
 	case "decimal":
+		result = "BigDecimal"
+	case "float":
+		result = "String"
+	case "double":
 		result = "BigDecimal"
 	}
 	return result

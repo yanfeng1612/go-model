@@ -40,6 +40,12 @@ public interface {{.backendObject.JavaBeanName}}Mapper {
      *
      * @auto generated
      */
+    int insertOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @auto generated
+     */
     int deleteById(long id);
 
     /**
@@ -52,7 +58,7 @@ public interface {{.backendObject.JavaBeanName}}Mapper {
      *
      * @auto generated
      */
-    {{.backendObject.JavaBeanName}} findById({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+    {{.backendObject.JavaBeanName}} findById(Long id);
 
     /**
      *

@@ -87,6 +87,21 @@ public class {{.backendObject.JavaBeanName}}Controller {
         return response;
     }
 
+    @RequestMapping(value = "/addOrUpdate")
+    public Response<{{.backendObject.JavaBeanName}}> addOrUpdate(@RequestBody {{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
+        Response<{{.backendObject.JavaBeanName}}> response = new Response<>();
+        try {
+            BasicResult result = {{.backendObject.JavaBeanNameLower}}Service.addOrUpdate({{.backendObject.JavaBeanNameLower}});
+            APIMsgCode apiMsgCode = CodeConverter.convert(result.getCode());
+            return ResponseTemplate.getResponse(apiMsgCode, null);
+        } catch (Exception e) {
+            response.setCode(APIMsgCode.FAILURE.getCode());
+            response.setMessage(APIMsgCode.FAILURE.getValue());
+            response.setStatus(APIEmRequestStatus.FAIL);
+        }
+        return response;
+    }
+
     /**
      * 查询数据列表
      */
@@ -108,14 +123,14 @@ public class {{.backendObject.JavaBeanName}}Controller {
      * 查询数据详情
      */
     @RequestMapping(value = "/detail", method = {RequestMethod.POST,RequestMethod.GET})
-    public Response<{{.backendObject.JavaBeanName}}> get{{.backendObject.JavaBeanName}}ById(@RequestBody {{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
-        LOG.info("查询参数 {}",{{.backendObject.JavaBeanNameLower}}) ;
+    public Response<{{.backendObject.JavaBeanName}}> get{{.backendObject.JavaBeanName}}ById(Long id) {
+        LOG.info("查询参数 {}",id) ;
         Response<{{.backendObject.JavaBeanName}}> response = new Response<>();
         try {
-            {{.backendObject.JavaBeanName}} result = {{.backendObject.JavaBeanNameLower}}Service.search{{.backendObject.JavaBeanName}}ById({{.backendObject.JavaBeanNameLower}});
+            {{.backendObject.JavaBeanName}} result = {{.backendObject.JavaBeanNameLower}}Service.search{{.backendObject.JavaBeanName}}ById(id);
             return ResponseTemplate.getResponse(APIMsgCode.SUCCESS, result);
         } catch (Exception e) {
-            LOG.error("查询数据异常:{}",{{.backendObject.JavaBeanNameLower}},e);
+            LOG.error("查询数据异常:{}",id,e);
             response = ResponseTemplate.FAILURE.getResponse(null);
         }
         return response;

@@ -45,7 +45,6 @@ type Theme struct {
 }
 
 const (
-	//TemplateRootPath       = "D://go//src//github.com//yanfeng1612//go-model//template" // 模板根路径
 	TemplateRootPath       = "template"                                            // 模板根路径
 	TemplateJavaRootPath   = TemplateRootPath + "/java"                            // java模板根路径
 	TemplateVueRootPath    = TemplateRootPath + "/vue"                             // java模板根路径
@@ -85,6 +84,7 @@ const (
 )
 
 func main() {
+	fmt.Println("start generate work")
 	args := os.Args
 	var configPath string
 	if len(args) > 1 {
@@ -101,11 +101,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	jsonString, err := json.Marshal(config)
+	_, err = json.Marshal(config)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(jsonString))
 
 	prepare(*config)
 
@@ -148,6 +147,7 @@ func main() {
 
 	buildUtils(*config)
 	buildDynamic(*config, schema)
+	fmt.Println("end generate work")
 }
 
 // 初始化 1.初始化文件目录

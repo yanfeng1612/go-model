@@ -94,6 +94,7 @@ go build            // 项目使用golang,依赖go语言环境
 ## 其他注意事项
 
 ### 一、我不想编译，想直接使用，去哪下载？
+直接在release中下载 https://github.com/yanfeng1612/go-model/releases/tag/v1.0。
 
 ## License
 
