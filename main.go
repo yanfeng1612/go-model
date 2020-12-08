@@ -8,7 +8,9 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -45,27 +47,32 @@ type Theme struct {
 }
 
 const (
-	TemplateRootPath       = "template"                                            // 模板根路径
-	TemplateJavaRootPath   = TemplateRootPath + "/java"                            // java模板根路径
-	TemplateVueRootPath    = TemplateRootPath + "/vue"                             // java模板根路径
-	PomPath                = TemplateJavaRootPath + "/utils/pom.vm"                // pom路径
-	BasicResultPath        = TemplateJavaRootPath + "/utils/BasicResult.vm"        // BasicResultPath路径
-	GenericResultPath      = TemplateJavaRootPath + "/utils/GenericResult.vm"      // GenericResult路径
-	CodeEnumPath           = TemplateJavaRootPath + "/utils/CodeEnum.vm"           // CodeEnumPath路径
-	QueryPath              = TemplateJavaRootPath + "/utils/Query.vm"              // Query路径
-	PageQueryPath          = TemplateJavaRootPath + "/utils/PageQuery.vm"          // PageQuery路径
-	IdPageQueryPath        = TemplateJavaRootPath + "/utils/IdPageQuery.vm"        // IdPageQuery路径
-	PagenationPath         = TemplateJavaRootPath + "/utils/Pagenation.vm"         // Pagenation路径
-	PageQueryWrapperPath   = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"   // PageQueryWrapper路径
-	ListResultPath         = TemplateJavaRootPath + "/utils/ListResult.vm"         // ListResult路径
-	PageListResultPath     = TemplateJavaRootPath + "/utils/PageListResult.vm"     // PageListResult路径
-	APIEmRequestStatusPath = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm" // APIEmRequestStatus路径
-	APIMsgCodePath         = TemplateJavaRootPath + "/utils/APIMsgCode.vm"         // APIMsgCode路径
-	ResponsePath           = TemplateJavaRootPath + "/utils/Response.vm"           // Response路径
-	ResponseTemplatePath   = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"   // ResponseTemplate路径
-	CodeConverterPath      = TemplateJavaRootPath + "/utils/CodeConverter.vm"      // CodeConverter路径
-	BootstrapPath          = TemplateJavaRootPath + "/utils/Bootstrap.vm"          // Bootstrap路径
-	ApplicationConfigPath  = TemplateJavaRootPath + "/utils/application.vm"        // application路径
+	TemplateRootPath            = "template"                                            // 模板根路径
+	TemplateJavaRootPath        = TemplateRootPath + "/java"                            // java模板根路径
+	SimpleThemeTemplateRootPath = TemplateJavaRootPath + "/simple/"                     // java模板根路径
+	TemplateVueRootPath         = TemplateRootPath + "/vue"                             // java模板根路径
+	PomPath                     = TemplateJavaRootPath + "/utils/pom.vm"                // pom路径
+	BasicResultPath             = TemplateJavaRootPath + "/utils/BasicResult.vm"        // BasicResultPath路径
+	GenericResultPath           = TemplateJavaRootPath + "/utils/GenericResult.vm"      // GenericResult路径
+	CodeEnumPath                = TemplateJavaRootPath + "/utils/CodeEnum.vm"           // CodeEnumPath路径
+	QueryPath                   = TemplateJavaRootPath + "/utils/Query.vm"              // Query路径
+	PageQueryPath               = TemplateJavaRootPath + "/utils/PageQuery.vm"          // PageQuery路径
+	IdPageQueryPath             = TemplateJavaRootPath + "/utils/IdPageQuery.vm"        // IdPageQuery路径
+	PagenationPath              = TemplateJavaRootPath + "/utils/Pagenation.vm"         // Pagenation路径
+	PageQueryWrapperPath        = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"   // PageQueryWrapper路径
+	ListResultPath              = TemplateJavaRootPath + "/utils/ListResult.vm"         // ListResult路径
+	PageListResultPath          = TemplateJavaRootPath + "/utils/PageListResult.vm"     // PageListResult路径
+	APIEmRequestStatusPath      = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm" // APIEmRequestStatus路径
+	APIMsgCodePath              = TemplateJavaRootPath + "/utils/APIMsgCode.vm"         // APIMsgCode路径
+	ResponsePath                = TemplateJavaRootPath + "/utils/Response.vm"           // Response路径
+	ResponseTemplatePath        = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"   // ResponseTemplate路径
+	CodeConverterPath           = TemplateJavaRootPath + "/utils/CodeConverter.vm"      // CodeConverter路径
+	BootstrapPath               = TemplateJavaRootPath + "/utils/Bootstrap.vm"          // Bootstrap路径
+	ApplicationConfigPath       = TemplateJavaRootPath + "/utils/application.vm"        // application路径
+	GitIgnorePath               = TemplateJavaRootPath + "/utils/gitignore.vm"          // gitignore路径
+	AssemblyPath                = TemplateJavaRootPath + "/utils/assembly.vm"           // assembly路径
+	StartPath                   = TemplateJavaRootPath + "/utils/start.vm"              // start路径
+	StopPath                    = TemplateJavaRootPath + "/utils/stop.vm"               // stop路径
 
 	PojoPath        = TemplateJavaRootPath + "/pojo.vm"        // pojo路径
 	PojoQueryPath   = TemplateJavaRootPath + "/pojoQuery.vm"   // pojoQuery路径
@@ -82,6 +89,18 @@ const (
 	vueIndexPath    = TemplateVueRootPath + "/index.vm"        // viewIndex路径
 	vueSidebarPath  = TemplateVueRootPath + "/sidebar.vm"      // viewSidebar路径
 )
+
+var (
+	SIMPLE_THEME     = []string{"simple-pojo", "simple-pojoQuery", "simple-controller", "simple-service", "simple-mapper", "simple-mapperXml"}
+	STANDARD_THEME   = []string{"pojo", "pojoQuery", "controller", "service", "serviceImpl", "manager", "managerImpl", "mapper", "mapperXml"}
+	UtilTemplateList = []string{"basicResult", "genericResult", "codeEnum", "query", "pageQuery", "pageQueryWrapper", "idPageQuery", "pagenation", "listResult", "pageListResult", "aPIEmRequestStatus", "aPIMsgCode", "response", "responseTemplate", "codeConverter", "gitIgnore", "assembly", "start", "stop"}
+)
+
+type TemplateObject struct {
+	name         string
+	templatePath string
+	outputPath   string
+}
 
 func main() {
 	fmt.Println("start generate work")
@@ -105,8 +124,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	prepare(*config)
 
 	schema := utils.ParseSqlFromMySqlSchema(config.DatabaseIp, config.DatabasePort, config.DatabaseUsername, config.DatabasePassword, config.DataBaseName)
 
@@ -145,141 +162,117 @@ func main() {
 		}
 	}
 
-	buildUtils(*config)
-	buildDynamic(*config, schema)
+	templateMap, templateList := prepare(*config, config.BackTheme)
+
+	buildUtils(*config, templateMap)
+	buildDynamic(*config, schema, templateList)
 	fmt.Println("end generate work")
 }
 
-// 初始化 1.初始化文件目录
-func prepare(config Config) {
-	if config.BackTheme != "None" {
-		path := config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
-		err := os.MkdirAll(path, os.ModePerm)
-		if err != nil {
-			panic("创建项目文件夹失败!")
-		}
-		err = os.MkdirAll(path+"/utils/", os.ModePerm)
-		if err != nil {
-			panic("创建utils文件夹失败!" + err.Error())
-		}
+// 初始化
+func prepare(config Config, theme string) (map[string]TemplateObject, []TemplateObject) {
+	prefix := config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
 
-		pathSlice := []string{path + "/domain/auto/", path + "/domain/custom/",
-			path + "/controller/auto/", path + "/controller/custom/",
-			path + "/service/auto/", path + "/service/custom/",
-			path + "/service/impl/auto/", path + "/service/impl/custom/",
-			path + "/manager/auto/", path + "/manager/custom/",
-			path + "/manager/impl/auto/", path + "/manager/impl/custom/",
-			path + "/dao/auto/", path + "/dao/custom/",
-			config.ExportPath + "/" + config.ProjectName + "/src/main/resources/mapper/auto/", config.ExportPath + "/" + config.ProjectName + "/src/main/resources/mapper/custom/",
-		}
+	m := make(map[string]TemplateObject)
+	// 构建基础模板
+	m["pom"] = TemplateObject{"pom", PomPath, config.ExportPath + "/" + config.ProjectName + "/pom.xml"}
+	m["bootstrap"] = TemplateObject{"bootstrap", BootstrapPath, prefix + "/Bootstrap.java"}
+	m["application"] = TemplateObject{"application", ApplicationConfigPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/application.yml"}
+	m["gitIgnore"] = TemplateObject{"gitIgnore", GitIgnorePath, config.ExportPath + "/" + config.ProjectName + "/.gitignore"}
+	m["assembly"] = TemplateObject{"assembly", AssemblyPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/assembly.xml"}
+	m["start"] = TemplateObject{"start", StartPath, config.ExportPath + "/" + config.ProjectName + "/src/main/bin/start.sh"}
+	m["stop"] = TemplateObject{"stop", StopPath, config.ExportPath + "/" + config.ProjectName + "/src/main/bin/stop.sh"}
 
-		if config.Auto {
-			for _, p := range pathSlice {
-				err = os.MkdirAll(p, os.ModePerm)
-				if err != nil {
-					panic("创建文件夹失败!" + err.Error())
-				}
-			}
-		} else {
-			err = os.MkdirAll(path+"/domain/", os.ModePerm)
-			if err != nil {
-				panic("创建pojo文件夹失败!" + err.Error())
-			}
-			err = os.MkdirAll(path+"/controller/", os.ModePerm)
-			if err != nil {
-				panic("创建controller失败")
-			}
-			err = os.MkdirAll(path+"/service/", os.ModePerm)
-			if err != nil {
-				panic("创建service文件夹失败!" + err.Error())
-			}
-			err = os.MkdirAll(path+"/service/impl/", os.ModePerm)
-			if err != nil {
-				panic("创建serviceImpl文件夹失败!" + err.Error())
-			}
-			err = os.MkdirAll(path+"/manager/", os.ModePerm)
-			if err != nil {
-				panic("创建manager文件夹失败!" + err.Error())
-			}
-			err = os.MkdirAll(path+"/manager/impl/", os.ModePerm)
-			if err != nil {
-				panic("创建managerImpl文件夹失败!" + err.Error())
-			}
-			err = os.MkdirAll(path+"/dao/", os.ModePerm)
-			if err != nil {
-				panic("创建dao文件夹失败!" + err.Error())
-			}
-			err = os.MkdirAll(config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/", os.ModePerm)
-			if err != nil {
-				panic("创建mapperXml文件夹失败!" + err.Error())
-			}
+	// 工具
+	m["basicResult"] = TemplateObject{"basicResult", BasicResultPath, prefix + "/utils/BasicResult.java"}
+	m["genericResult"] = TemplateObject{"genericResult", GenericResultPath, prefix + "/utils/GenericResult.java"}
+	m["codeEnum"] = TemplateObject{"codeEnum", CodeEnumPath, prefix + "/utils/CodeEnum.java"}
+	m["query"] = TemplateObject{"query", QueryPath, prefix + "/utils/Query.java"}
+	m["pageQuery"] = TemplateObject{"basicResult", PageQueryPath, prefix + "/utils/PageQuery.java"}
+	m["pageQueryWrapper"] = TemplateObject{"pageQueryWrapper", PageQueryWrapperPath, prefix + "/utils/PageQueryWrapper.java"}
+	m["idPageQuery"] = TemplateObject{"basicResult", IdPageQueryPath, prefix + "/utils/IdPageQuery.java"}
+	m["pagenation"] = TemplateObject{"pagenation", PagenationPath, prefix + "/utils/Pagenation.java"}
+	m["listResult"] = TemplateObject{"listResult", ListResultPath, prefix + "/utils/ListResult.java"}
+	m["pageListResult"] = TemplateObject{"pageListResult", PageListResultPath, prefix + "/utils/PageListResult.java"}
+	m["aPIEmRequestStatus"] = TemplateObject{"aPIEmRequestStatus", APIEmRequestStatusPath, prefix + "/utils/APIEmRequestStatus.java"}
+	m["aPIMsgCode"] = TemplateObject{"aPIMsgCode", APIMsgCodePath, prefix + "/utils/APIMsgCode.java"}
+	m["response"] = TemplateObject{"response", ResponsePath, prefix + "/utils/Response.java"}
+	m["responseTemplate"] = TemplateObject{"responseTemplate", ResponseTemplatePath, prefix + "/utils/ResponseTemplate.java"}
+	m["codeConverter"] = TemplateObject{"codeConverter", CodeConverterPath, prefix + "/utils/CodeConverter.java"}
+
+	m["pojo"] = TemplateObject{"pojo", PojoPath, prefix + "/domain/%s.java"}
+	m["pojoQuery"] = TemplateObject{"pojoQuery", PojoQueryPath, prefix + "/domain/%sQuery.java"}
+	m["controller"] = TemplateObject{"controller", ControllerPath, prefix + "/controller/%sController.java"}
+	m["service"] = TemplateObject{"service", ServicePath, prefix + "/service/%sService.java"}
+	m["serviceImpl"] = TemplateObject{"serviceImpl", ServiceImplPath, prefix + "/service/impl/%sServiceImpl.java"}
+	m["manager"] = TemplateObject{"manager", ManagerPath, prefix + "/manager/%sManager.java"}
+	m["managerImpl"] = TemplateObject{"managerImpl", ManagerImplPath, prefix + "/manager/impl/%sManagerImpl.java"}
+	m["mapper"] = TemplateObject{"mapper", MapperPath, prefix + "/mapper/%sMapper.java"}
+	m["mapperXml"] = TemplateObject{"mapperXml", MapperXmlPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/mapper/%sMapper.xml"}
+
+	m["simple-pojo"] = TemplateObject{"pojo", SimpleThemeTemplateRootPath + "pojo.vm", prefix + "/domain/%s.java"}
+	m["simple-pojoQuery"] = TemplateObject{"pojoQuery", SimpleThemeTemplateRootPath + "pojoQuery.vm", prefix + "/domain/%sQuery.java"}
+	m["simple-controller"] = TemplateObject{"controller", SimpleThemeTemplateRootPath + "controller.vm", prefix + "/controller/%sController.java"}
+	m["simple-service"] = TemplateObject{"service", SimpleThemeTemplateRootPath + "service.vm", prefix + "/service/%sService.java"}
+	m["simple-mapper"] = TemplateObject{"mapper", SimpleThemeTemplateRootPath + "mapper.vm", prefix + "/mapper/%sMapper.java"}
+	m["simple-mapperXml"] = TemplateObject{"mapperXml", SimpleThemeTemplateRootPath + "mapperXml.vm", config.ExportPath + "/" + config.ProjectName + "/src/main/resources/mapper/%sMapper.xml"}
+
+	arr := make([]TemplateObject, 0)
+
+	if theme == "Simple" {
+		for _, tem := range SIMPLE_THEME {
+			arr = append(arr, m[tem])
+		}
+	} else if theme == "Standard" {
+		for _, tem := range STANDARD_THEME {
+			arr = append(arr, m[tem])
 		}
 	}
-
-	if config.FrontTheme != "None" {
-		// 前端vue框架
-		err := os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName, os.ModePerm)
-		if err != nil {
-			panic("创建vue-admin失败")
-		}
-		err = os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName+"/src", os.ModePerm)
-		if err != nil {
-			panic("创建vue src失败")
-		}
-		err = utils.CopyDir(TemplateVueRootPath+"/static", config.ExportPath+config.ProjectAdminName)
-		if err != nil {
-			panic("创建admin静态资源文件失败")
-		}
-	}
+	return m, arr
 }
 
-func buildUtils(config Config) {
+func buildUtils(config Config, templateMap map[string]TemplateObject) {
 	m := buildCommonMap(config)
 
 	if config.BackTheme == "None" {
 		return
 	}
 
-	prefix := config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
 	if config.FirstInit {
-		run(PomPath, config.ExportPath+"/"+config.ProjectName+"/pom.xml", m)
-		run(BootstrapPath, prefix+"/Bootstrap.java", m)
-		run(ApplicationConfigPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/application.yml", m)
+		pomObj := templateMap["pom"]
+		bootstrapObj := templateMap["bootstrap"]
+		applicationObj := templateMap["application"]
+
+		run(pomObj.templatePath, pomObj.outputPath, m)
+		run(bootstrapObj.templatePath, bootstrapObj.outputPath, m)
+		run(applicationObj.templatePath, applicationObj.outputPath, m)
 	}
-	run(BasicResultPath, prefix+"/utils/BasicResult.java", m)
-	run(CodeEnumPath, prefix+"/utils/CodeEnum.java", m)
-	run(QueryPath, prefix+"/utils/Query.java", m)
-	run(GenericResultPath, prefix+"/utils/GenericResult.java", m)
-	run(PagenationPath, prefix+"/utils/Pagenation.java", m)
-	run(PageQueryPath, prefix+"/utils/PageQuery.java", m)
-	run(PageQueryWrapperPath, prefix+"/utils/PageQueryWrapper.java", m)
-	run(ListResultPath, prefix+"/utils/ListResult.java", m)
-	run(PageListResultPath, prefix+"/utils/PageListResult.java", m)
-	run(IdPageQueryPath, prefix+"/utils/IdPageQuery.java", m)
-	run(APIEmRequestStatusPath, prefix+"/utils/APIEmRequestStatus.java", m)
-	run(APIMsgCodePath, prefix+"/utils/APIMsgCode.java", m)
-	run(ResponsePath, prefix+"/utils/Response.java", m)
-	run(ResponseTemplatePath, prefix+"/utils/ResponseTemplate.java", m)
-	run(CodeConverterPath, prefix+"/utils/CodeConverter.java", m)
+
+	for _, templateName := range UtilTemplateList {
+		template := templateMap[templateName]
+		run(template.templatePath, template.outputPath, m)
+	}
 }
 
 func run(templatePath, outputPath string, m map[string]interface{}) {
 	t := buildCommon(templatePath)
 	tmpFilePath := outputPath + "Tmp"
-	tmpFile, err := os.OpenFile(tmpFilePath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 066)
+	tmpFile, err := createFile(tmpFilePath)
 	err = t.Execute(tmpFile, m)
 	if err != nil {
 		panic(err)
 	}
+
 	err = tmpFile.Close()
 	if err != nil {
 		panic(err)
 	}
 
-	tmp, err := os.OpenFile(tmpFilePath, os.O_RDONLY, 066)
-	file, err := os.OpenFile(outputPath, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 066)
+	os.Remove(outputPath)
+	tmpFile, _ = os.Open(tmpFilePath)
+	file, err := createFile(outputPath)
 	defer file.Close()
-	reader := bufio.NewReader(tmp)
+	reader := bufio.NewReader(tmpFile)
 	preLine := ""
 	for {
 		line, _, err := reader.ReadLine()
@@ -299,10 +292,12 @@ func run(templatePath, outputPath string, m map[string]interface{}) {
 		}
 		preLine = strings.TrimSpace(newLine)
 	}
-	err = tmp.Close()
+
+	err = tmpFile.Close()
 	if err != nil {
 		panic(err)
 	}
+
 	err = os.Remove(tmpFilePath)
 	if err != nil {
 		panic(err)
@@ -311,7 +306,6 @@ func run(templatePath, outputPath string, m map[string]interface{}) {
 
 func buildCommon(templatePath string) *template.Template {
 	textByte, err := ioutil.ReadFile(templatePath)
-	//textByte, err := utils.Asset(templatePath)
 	if err != nil {
 		panic(err)
 	}
@@ -332,8 +326,7 @@ func buildCommonMap(config Config) map[string]interface{} {
 	return m
 }
 
-func buildDynamic(config Config, schema *utils.Schema) {
-	var pathPrefix = config.ExportPath + "/" + config.ProjectName + "/src/main/java/" + strings.ReplaceAll(config.PackageName, ".", "/")
+func buildDynamic(config Config, schema *utils.Schema, templateObjectList []TemplateObject) {
 	for _, table := range schema.Tables {
 		m := buildCommonMap(config)
 		m["backendObject"] = table
@@ -342,48 +335,31 @@ func buildDynamic(config Config, schema *utils.Schema) {
 		m["r"] = "}}"
 		m["l1"] = "{"
 
-		if config.BackTheme != "None" {
-			if config.Auto {
-				run(PojoPath, pathPrefix+"/domain/auto/"+table.JavaBeanName+".java", m)
-				run(PojoQueryPath, pathPrefix+"/domain/auto/"+table.JavaBeanName+"Query.java", m)
-				run(ControllerPath, pathPrefix+"/controller/auto/"+table.JavaBeanName+"Controller.java", m)
-				run(ServicePath, pathPrefix+"/service/auto/"+table.JavaBeanName+"Service.java", m)
-				run(ServiceImplPath, pathPrefix+"/service/impl/auto/"+table.JavaBeanName+"ServiceImpl.java", m)
-				run(ManagerPath, pathPrefix+"/manager/auto/"+table.JavaBeanName+"Manager.java", m)
-				run(ManagerImplPath, pathPrefix+"/manager/impl/auto/"+table.JavaBeanName+"ManagerImpl.java", m)
-				run(MapperPath, pathPrefix+"/dao/auto/"+table.JavaBeanName+"Mapper.java", m)
-				run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/auto/"+table.JavaBeanName+"Mapper.xml", m)
-			} else {
-				run(PojoPath, pathPrefix+"/domain/"+table.JavaBeanName+".java", m)
-				run(ControllerPath, pathPrefix+"/controller/"+table.JavaBeanName+"Controller.java", m)
-				run(PojoQueryPath, pathPrefix+"/domain/"+table.JavaBeanName+"Query.java", m)
-				run(ServicePath, pathPrefix+"/service/"+table.JavaBeanName+"Service.java", m)
-				run(ServiceImplPath, pathPrefix+"/service/impl/"+table.JavaBeanName+"ServiceImpl.java", m)
-				run(ManagerPath, pathPrefix+"/manager/"+table.JavaBeanName+"Manager.java", m)
-				run(ManagerImplPath, pathPrefix+"/manager/impl/"+table.JavaBeanName+"ManagerImpl.java", m)
-				run(MapperPath, pathPrefix+"/dao/"+table.JavaBeanName+"Mapper.java", m)
-				run(MapperXmlPath, config.ExportPath+"/"+config.ProjectName+"/src/main/resources/mapper/"+table.JavaBeanName+"Mapper.xml", m)
-			}
+		for _, tem := range templateObjectList {
+			run(tem.templatePath, strings.ReplaceAll(tem.outputPath, "%s", table.JavaBeanName), m)
 		}
-
-		if config.FrontTheme != "None" {
-			err := os.MkdirAll(config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower, os.ModePerm)
-			if err != nil {
-				panic(err)
-			}
-			run(vueListPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/list.vue", m)
-			run(vueEditPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/edit.vue", m)
-			run(vueDetailPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/page/"+table.JavaBeanNameLower+"/detail.vue", m)
-		}
-
 	}
-	if config.FrontTheme != "None" {
-		m := make(map[string]interface{})
-		m["tables"] = schema.Tables
-		m["l"] = "{{"
-		m["r"] = "}}"
-		run(vueIndexPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/router/index.js", m)
-		run(vueSidebarPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/common/Sidebar.vue", m)
-	}
+	//if config.FrontTheme != "None" {
+	//	m := make(map[string]interface{})
+	//	m["tables"] = schema.Tables
+	//	m["l"] = "{{"
+	//	m["r"] = "}}"
+	//	run(vueIndexPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/router/index.js", m)
+	//	run(vueSidebarPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/common/Sidebar.vue", m)
+	//}
+}
 
+func createFile(path string) (*os.File, error) {
+	file, _ := os.OpenFile(path, os.O_RDWR, 0777)
+	if file != nil {
+		return file, nil
+	}
+	dir, _ := filepath.Split(path)
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		log.Fatal("创建目录失败", err)
+		return nil, err
+	}
+	file, _ = os.Create(path)
+	return file, nil
 }

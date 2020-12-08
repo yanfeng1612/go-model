@@ -1,0 +1,116 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.manager.auto;
+{{else}}
+package {{.config.PackageName}}.manager;
+{{end}}
+
+import java.util.List;
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.utils.*;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.utils.*;
+{{end}}
+
+/**
+ * {{.backendObject.Comment}}
+ * @author {{.author}}
+ * @date {{.date}}
+ **/
+public interface {{.backendObject.JavaBeanName}}Manager {
+
+     /**
+     *
+     * @auto generated
+     */
+    int insert{{.backendObject.JavaBeanName}}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @auto generated
+     */
+    int insertBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List);
+
+    /**
+     *
+     * @auto generated
+     */
+    int insertOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @auto generated
+     */
+    int deleteById(long id);
+
+    /**
+     *
+     * @auto generated
+     */
+    int update{{.backendObject.JavaBeanName}}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @auto generated
+     */
+    int updateBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List);
+
+    /**
+     *
+     * @auto generated
+     */
+    {{.backendObject.JavaBeanName}} findById(Long id);
+
+    /**
+     *
+     * @auto generated
+     */
+    ListResult<{{.backendObject.JavaBeanName}}> search{{.backendObject.JavaBeanName}}List(Query<{{.backendObject.JavaBeanName}}Query> query);
+
+    /**
+     *
+     * @auto generated
+     */
+    PageListResult<{{.backendObject.JavaBeanName}}> searchPage{{.backendObject.JavaBeanName}}List(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery);
+
+    /**
+    *
+    * @auto generated
+    */
+    ListResult<{{.backendObject.JavaBeanName}}> searchPage{{.backendObject.JavaBeanName}}ListById(IdPageQuery<{{.backendObject.JavaBeanName}}Query> idPageQuery);
+
+    /**
+     *
+     * @auto generated
+     */
+    GenericResult<Long> getTotalCount(Query<{{.backendObject.JavaBeanName}}Query> query);
+
+    /**
+     *
+     * @auto generated
+     */
+    GenericResult<Long> getCount(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery);
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    /**
+     *
+     * @generated
+     */
+    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(String ${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), ${shardingField.showType} ${shardingField.fieldName}#end);
+    {{end}}
+    {{end}}
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    /**
+     *
+     * @generated
+     */
+    int update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+    {{end}}
+    {{end}}
+}

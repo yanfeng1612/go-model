@@ -1,0 +1,100 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.dao.auto;
+{{else}}
+package {{.config.PackageName}}.dao;
+{{end}}
+
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.utils.*;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
+import {{.config.PackageName}}.utils.*;
+{{end}}
+
+
+/**
+ * {{.backendObject.Comment}}
+ * @author {{.author}}
+ * @date {{.date}}
+ **/
+public interface {{.backendObject.JavaBeanName}}Mapper {
+
+    /**
+     * 增加
+     */
+    int insert({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     * 批量增加
+     */
+    int insertBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List);
+
+    /**
+     * 无则增加有则修改
+     */
+    int insertOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     * 根据id删除
+     */
+    int deleteById(long id);
+
+    /**
+     * 根据id修改
+     */
+    int update({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     * 根据id查询
+     */
+    {{.backendObject.JavaBeanName}} findById(Long id);
+
+    /**
+     * 根据条件查询
+     */
+    List<{{.backendObject.JavaBeanName}}> getAllList(Query<{{.backendObject.JavaBeanName}}Query> query);
+
+    /**
+     * 根据条件分页查询
+     */
+    List<{{.backendObject.JavaBeanName}}> getPagenationList(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery);
+
+    /**
+     * 按照最小id分页查询
+     */
+    List<{{.backendObject.JavaBeanName}}> getPagenationListById(IdPageQuery<{{.backendObject.JavaBeanName}}Query> idPageQuery);
+
+    /**
+     * 分页查询条数
+     */
+    long getCount(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery);
+
+    /**
+     * 查询条数
+     */
+    long getTotalCount(Query<{{.backendObject.JavaBeanName}}Query> query);
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    /**
+     * 根据${field.JavaFieldNameUF}查询
+     */
+    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(@Param("${field.fieldName}") String ${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), @Param("${shardingField.fieldName}") ${shardingField.showType} ${shardingField.fieldName}#end);
+    {{end}}
+    {{end}}
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    /**
+     * 根据${field.JavaFieldNameUF}修改
+     */
+    int update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanName}} ${backendObject.javaBeanNameLower});
+    {{end}}
+    {{end}}
+
+}

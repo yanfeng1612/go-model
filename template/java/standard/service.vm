@@ -1,0 +1,114 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.service.auto;
+{{else}}
+package {{.config.PackageName}}.service;
+{{end}}
+
+import java.util.List;
+import java.util.Date;
+import java.math.BigDecimal;
+
+import lombok.Data;
+
+import {{.config.PackageName}}.utils.*;
+
+{{if eq .config.Auto true}}
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
+{{else}}
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
+import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
+{{end}}
+
+/**
+ * {{.backendObject.Comment}}
+ * @author {{.author}}
+ * @date {{.date}}
+ **/
+public interface {{.backendObject.JavaBeanName}}Service {
+
+    /**
+     *
+     * @generated
+     */
+    BasicResult add{{.backendObject.JavaBeanName}}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @generated
+     */
+    BasicResult addBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List);
+
+    /**
+     *
+     * @generated
+     */
+    BasicResult addOrUpdate({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @generated
+     */
+    BasicResult deleteById(long id);
+
+    /**
+     *
+     * @generated
+     */
+    BasicResult update{{.backendObject.JavaBeanName}}ById({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+
+    /**
+     *
+     * @generated
+     */
+    BasicResult updateBatch(List<{{.backendObject.JavaBeanName}}> {{.backendObject.JavaBeanNameLower}}List);
+
+    /**
+     *
+     * @generated
+     */
+    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}ById(Long id);
+
+    /**
+     *
+     * @generated
+     */
+    ListResult<{{.backendObject.JavaBeanName}}> search{{.backendObject.JavaBeanName}}(Query<{{.backendObject.JavaBeanName}}Query> query);
+
+    /**
+     *
+     * @generated
+     */
+    PageListResult<{{.backendObject.JavaBeanName}}> searchPage{{.backendObject.JavaBeanName}}(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery);
+
+    /**
+    *
+    * @generated
+    */
+    ListResult<{{.backendObject.JavaBeanName}}> searchPage{{.backendObject.JavaBeanName}}ById(IdPageQuery<{{.backendObject.JavaBeanName}}Query> idPageQuery);
+
+    /**
+     *
+     * @generated
+     */
+    GenericResult<Long> getCount(PageQuery<{{.backendObject.JavaBeanName}}Query> pageQuery);
+
+    /**
+     *
+     * @generated
+     */
+    GenericResult<Long> getTotalCount(Query<{{.backendObject.JavaBeanName}}Query> query);
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(String ${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), ${shardingField.showType} ${shardingField.fieldName}#end);
+    {{end}}
+    {{end}}
+
+    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.SingleQuery 1}}
+    BasicResult update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}});
+    {{end}}
+    {{end}}
+
+}

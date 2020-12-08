@@ -1,7 +1,5 @@
 package {{.config.PackageName}}.utils;
 
-import {{.config.PackageName}}.utils.Response;
-
 /**
  * 服务请求状态API枚举
  * @author {{.author}}

@@ -1,0 +1,27 @@
+package {{.config.PackageName}};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+/**
+ * SpringBoot Main 方法入口
+ * @author {{.author}}
+ * @date {{.date}}
+ */
+@SpringBootApplication
+@EnableTransactionManagement
+@MapperScan({"{{.config.PackageName}}.dao"})
+public class Bootstrap {
+
+    /**
+     * 程序启动入口
+     * @param args 启动参数
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(ManagerApplication.class, args);
+    }
+
+}

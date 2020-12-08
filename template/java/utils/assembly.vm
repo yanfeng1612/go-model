@@ -1,0 +1,32 @@
+<assembly>
+    <id>package</id>
+    <formats>
+        <format>zip</format>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>src/main/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>script</directory>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/classes</directory>
+            <outputDirectory>conf</outputDirectory>
+            <excludes>
+                <exclude>com/</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>target/</directory>
+            <outputDirectory>/lib</outputDirectory>
+            <includes>
+                <include>demo.jar</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>

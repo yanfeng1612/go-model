@@ -1,0 +1,27 @@
+{{if eq .config.Auto true}}
+package {{.config.PackageName}}.domain.auto;
+{{else}}
+package {{.config.PackageName}}.domain;
+{{end}}
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import lombok.Data;
+
+/**
+ * {{.backendObject.Comment}}
+ * @author {{.author}}
+ * @date {{.date}}
+ **/
+@Data
+public class {{.backendObject.JavaBeanName}} implements java.io.Serializable {
+
+    static final long serialVersionUID = 1L;
+    {{range $i,$field := .backendObject.Columns}}
+    /**
+     * {{$field.Comment}}
+     */
+    private {{$field.JavaFieldType}} {{$field.JavaFieldName}};
+    {{end}}
+}
