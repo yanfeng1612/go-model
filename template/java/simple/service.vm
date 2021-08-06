@@ -20,11 +20,11 @@ import {{.config.PackageName}}.utils.*;
 {{if eq .config.Auto true}}
 import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}};
 import {{.config.PackageName}}.domain.auto.{{.backendObject.JavaBeanName}}Query;
-import {{.config.PackageName}}.dao.auto.{{.backendObject.JavaBeanName}}Mapper;
+import {{.config.PackageName}}.mapper.auto.{{.backendObject.JavaBeanName}}Mapper;
 {{else}}
 import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}};
 import {{.config.PackageName}}.domain.{{.backendObject.JavaBeanName}}Query;
-import {{.config.PackageName}}.dao.{{.backendObject.JavaBeanName}}Mapper;
+import {{.config.PackageName}}.mapper.{{.backendObject.JavaBeanName}}Mapper;
 {{end}}
 
 /**
@@ -193,26 +193,22 @@ public class {{.backendObject.JavaBeanName}}Service {
     {{range $i,$field := .backendObject.Columns}}
     {{if eq $field.SingleQuery 1}}
     /**
-     *
-     * @generated
+     * 根据{{$field.Comment}}查询
      */
-    public {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(String ${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), ${shardingField.showType} ${shardingField.fieldName}#end) {
-        return {{.backendObject.JavaBeanNameLower}}Mapper.search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), ${shardingField.fieldName}#end);
+    public {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
     }
     {{end}}
     {{end}}
 
     {{range $i,$field := .backendObject.Columns}}
-    {{if eq $field.SingleQuery 1}}
-        /**
-         *
-         * @generated
-         */
-        public BasicResult update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanName}} {{.backendObject.JavaBeanNameLower}}) {
-            log.info("request {{.backendObject.JavaBeanName}}Service.update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF} param:{}",JSON.toJSONString({{.backendObject.JavaBeanNameLower}}));
-            {{.backendObject.JavaBeanNameLower}}Mapper.update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanNameLower}});
-            return BasicResult.newSuccessBasicResult();
-        }
+    {{if eq $field.UpdateField 1}}
+    /**
+     * 根据{{$field.Comment}}修改
+     */
+    public {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+    }
     {{end}}
     {{end}}
 

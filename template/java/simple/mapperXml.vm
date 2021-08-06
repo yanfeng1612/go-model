@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 {{if eq .config.Auto true}}
-<mapper namespace="{{.config.PackageName}}.dao.auto.{{.backendObject.JavaBeanName}}Mapper">
+<mapper namespace="{{.config.PackageName}}.mapper.auto.{{.backendObject.JavaBeanName}}Mapper">
 {{else}}
-<mapper namespace="{{.config.PackageName}}.dao.{{.backendObject.JavaBeanName}}Mapper">
+<mapper namespace="{{.config.PackageName}}.mapper.{{.backendObject.JavaBeanName}}Mapper">
 {{end}}
 
     {{if eq .config.Auto true}}
@@ -131,7 +131,7 @@
         /* {{.backendObject.Comment}} */
         <trim prefix="SET" prefixOverrides=",">
         {{range $i,$field := .backendObject.Columns}}
-        {{if eq $field.UpdateField 1}}
+        {{if eq $field.WhereUpdateField 1}}
             <if test="{{$field.JavaFieldName}} != null">
                 ,{{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}}
             </if>
@@ -192,46 +192,35 @@
     </select>
 
     {{range $i,$field := .backendObject.Columns}}
-        {{if eq $field.SingleQuery 1}}
-            <select id="search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}" parameterType="{{.backendObject.JavaBeanName}}" resultMap="baseResultMap">
-                    SELECT
-                    <include refid="queryColumns" />
-                    FROM {{.backendObject.Name}} /* {{.backendObject.Comment}} */
-                    WHERE
-                    {{$field.Name}} = #{{$field.JavaFieldName}}
-            </select>
-        {{end}}
+    {{if eq $field.SingleQuery 1}}
+    <select id="search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}" parameterType="{{$.backendObject.JavaBeanName}}" resultMap="baseResultMap">
+        SELECT
+        <include refid="queryColumns" />
+        FROM {{$.backendObject.Name}} /* {{$.backendObject.Comment}} */
+        WHERE
+        {{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}}
+    </select>
+    {{end}}
     {{end}}
 
     {{range $i,$field := .backendObject.Columns}}
-        {{if eq $field.SingleQuery 1}}
-            <select id="search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}" parameterType="{{.backendObject.JavaBeanName}}" resultMap="baseResultMap">
-                    SELECT
-                    <include refid="queryColumns" />
-                    FROM {{.backendObject.Name}} /* {{.backendObject.Comment}} */
-                    WHERE
-                    {{$field.Name}} = #{{$field.JavaFieldName}}
-            </select>
-        {{end}}
-    {{end}}
-
-    {{range $i,$field := .backendObject.Columns}}
+    {{if eq $field.UpdateField 1}}
+    <update id="update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}" parameterType="{{$.backendObject.JavaBeanName}}" >
+        UPDATE  {{$.backendObject.Name}}
+        <trim prefix="SET" suffixOverrides=",">
+        {{range $i,$field := $.backendObject.Columns}}
         {{if eq $field.WhereUpdateField 1}}
-            <update id="update${backendObject.javaBeanName}By${field.JavaFieldNameUF}" parameterType="{{.backendObject.JavaBeanName}}" >
-                    UPDATE  {{.backendObject.Name}}
-                    <trim prefix="SET" suffixOverrides=",">
-                    {{range $i,$field := .backendObject.Columns}}
-                    {{if eq $field.UpdateField 1}}
-                        <if test="{{$field.JavaFieldName}} != null">
-                            /* {{$field.Comment}} */
-                            {{$field.Name}} = #{{$field.JavaFieldName}} ,
-                        </if>
-                    {{end}}
-                    {{end}}
-                    </trim>
-                    WHERE
-                    {{$field.Name}} = #{{$field.JavaFieldName}}
-                </update>
+            <if test="{{$field.JavaFieldName}} != null">
+                /* {{$field.Comment}} */
+                {{$field.Name}} = #{{$field.JavaFieldName}} ,
+            </if>
         {{end}}
+        {{end}}
+        </trim>
+        WHERE
+        {{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}}
+    </update>
     {{end}}
+    {{end}}
+
 </mapper>

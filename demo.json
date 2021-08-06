@@ -1,0 +1,29 @@
+{
+    "projectName" : "demo",
+    "projectAdminName" : "demo-admin",
+    "backTheme" : "Simple",
+    "frontTheme" : "Vue",
+    "auto" : false,
+    "firstInit" : true,
+    "exportPath": "/Users/luruijiao/tmp/",
+    "packageName" : "com.yanfeng.demo",
+    "dataBaseName": "demo",
+    "databaseIp"  : "127.0.0.1",
+    "databasePort":  3306,
+    "databaseUsername": "root",
+    "databasePassword": "111111",
+    "tableConfigList": [
+        {
+            "tableName": "order",
+            "inListQuery": [
+                "state"
+            ],
+            "singleQueryList": [
+                "third_no"
+            ],
+            "updateFieldList": [
+                "third_no"
+            ]
+        }
+    ]
+}

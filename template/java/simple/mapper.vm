@@ -1,7 +1,7 @@
 {{if eq .config.Auto true}}
-package {{.config.PackageName}}.dao.auto;
+package {{.config.PackageName}}.mapper.auto;
 {{else}}
-package {{.config.PackageName}}.dao;
+package {{.config.PackageName}}.mapper;
 {{end}}
 
 import java.util.List;
@@ -82,18 +82,22 @@ public interface {{.backendObject.JavaBeanName}}Mapper {
     {{range $i,$field := .backendObject.Columns}}
     {{if eq $field.SingleQuery 1}}
     /**
-     * 根据${field.JavaFieldNameUF}查询
+     * 根据{{$field.Comment}}查询
      */
-    {{.backendObject.JavaBeanName}} search{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}(@Param("${field.fieldName}") String ${field.fieldName}#if($shardingField && $shardingField.fieldName != $field.fieldName), @Param("${shardingField.fieldName}") ${shardingField.showType} ${shardingField.fieldName}#end);
+    public {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+    }
     {{end}}
     {{end}}
 
     {{range $i,$field := .backendObject.Columns}}
-    {{if eq $field.SingleQuery 1}}
+    {{if eq $field.UpdateField 1}}
     /**
-     * 根据${field.JavaFieldNameUF}修改
+     * 根据{{$field.Comment}}修改
      */
-    int update{{.backendObject.JavaBeanName}}By${field.JavaFieldNameUF}({{.backendObject.JavaBeanName}} ${backendObject.javaBeanNameLower});
+    public {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+    }
     {{end}}
     {{end}}
 

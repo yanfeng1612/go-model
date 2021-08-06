@@ -3,9 +3,10 @@ package utils
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"strconv"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Schema struct {
@@ -18,7 +19,7 @@ type Table struct {
 	JavaBeanName      string
 	JavaBeanNameLower string
 	Comment           string
-	Columns           []Column
+	Columns           []*Column
 }
 
 type Column struct {
@@ -77,7 +78,7 @@ func ParseSqlFromMySqlSchema(ip string, port int, username string, password stri
 			JavaBeanName:      convertJavaBeanName(tableName),
 			JavaBeanNameLower: strings.ToLower(string(convertJavaBeanName(tableName)[0])) + convertJavaBeanName(tableName)[1:],
 			Comment:           comment,
-			Columns:           make([]Column, 0)}
+			Columns:           make([]*Column, 0)}
 		tableMap[tableName] = &table
 	}
 
@@ -86,26 +87,26 @@ func ParseSqlFromMySqlSchema(ip string, port int, username string, password stri
 		panic(err)
 	}
 
-	columns := make([]Column, 0)
+	columns := make([]*Column, 0)
 	for rows.Next() {
 		var tableName, name, comment, columnType string
 		err = rows.Scan(&tableName, &name, &comment, &columnType)
 		if err != nil {
 			panic(err)
 		}
-		updateField := 1
+		whereUpdateField := 1
 		if name == "id" || name == "created_time" || name == "modified_time" {
-			updateField = 0
+			whereUpdateField = 0
 		}
-		column := Column{
-			Name:            name,
-			Comment:         comment,
-			ColumnType:      columnType,
-			JavaFieldName:   convertJavaFieldName(name),
-			JavaFieldNameUP: convertJavaBeanName(name),
-			JavaFieldType:   convertJavaFieldType(columnType),
-			UpdateField:     updateField,
-			TableName:       tableName}
+		column := &Column{
+			Name:             name,
+			Comment:          comment,
+			ColumnType:       columnType,
+			JavaFieldName:    convertJavaFieldName(name),
+			JavaFieldNameUP:  convertJavaBeanName(name),
+			JavaFieldType:    convertJavaFieldType(columnType),
+			WhereUpdateField: whereUpdateField,
+			TableName:        tableName}
 		columns = append(columns, column)
 	}
 	for _, column := range columns {

@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/yanfeng1612/go-model/utils"
 	"html/template"
 	"io"
 	"io/ioutil"
@@ -13,6 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/yanfeng1612/go-model/utils"
 )
 
 type Config struct {
@@ -35,7 +36,6 @@ type Config struct {
 type TableConfig struct {
 	TableName       string   `json:"tableName"`
 	ShardingKey     string   `json:"shardingKey"`
-	DoubleWrite     int      `json:"doubleWrite"`
 	SingleQueryList []string `json:"singleQueryList"`
 	InListQuery     []string `json:"inListQuery"`
 	UpdateFieldList []string `json:"updateFieldList"`
@@ -71,8 +71,8 @@ const (
 	ApplicationConfigPath       = TemplateJavaRootPath + "/utils/application.vm"        // application路径
 	GitIgnorePath               = TemplateJavaRootPath + "/utils/gitignore.vm"          // gitignore路径
 	AssemblyPath                = TemplateJavaRootPath + "/utils/assembly.vm"           // assembly路径
-	StartPath                   = TemplateJavaRootPath + "/utils/start.vm"              // start路径
-	StopPath                    = TemplateJavaRootPath + "/utils/stop.vm"               // stop路径
+	StartPath                   = TemplateJavaRootPath + "/utils/start.sh"              // start路径
+	StopPath                    = TemplateJavaRootPath + "/utils/stop.sh"               // stop路径
 
 	PojoPath        = TemplateJavaRootPath + "/pojo.vm"        // pojo路径
 	PojoQueryPath   = TemplateJavaRootPath + "/pojoQuery.vm"   // pojoQuery路径
@@ -109,7 +109,7 @@ func main() {
 	if len(args) > 1 {
 		configPath = args[1]
 	} else {
-		configPath = "go-model.json"
+		configPath = "demo.json"
 	}
 	jsonTxt, err := ioutil.ReadFile(configPath)
 	if err != nil {
@@ -155,9 +155,9 @@ func main() {
 				c.SingleQuery = 0
 			}
 			if _, ok := updateFieldMap[t.Name+"_"+c.Name]; ok {
-				c.WhereUpdateField = 1
+				c.UpdateField = 1
 			} else {
-				c.WhereUpdateField = 0
+				c.UpdateField = 0
 			}
 		}
 	}
@@ -258,9 +258,12 @@ func run(templatePath, outputPath string, m map[string]interface{}) {
 	t := buildCommon(templatePath)
 	tmpFilePath := outputPath + "Tmp"
 	tmpFile, err := createFile(tmpFilePath)
-	err = t.Execute(tmpFile, m)
 	if err != nil {
 		panic(err)
+	}
+	err = t.Execute(tmpFile, m)
+	if err != nil {
+		log.Panic("tmpFilePath"+tmpFilePath, err)
 	}
 
 	err = tmpFile.Close()
@@ -271,6 +274,9 @@ func run(templatePath, outputPath string, m map[string]interface{}) {
 	os.Remove(outputPath)
 	tmpFile, _ = os.Open(tmpFilePath)
 	file, err := createFile(outputPath)
+	if err != nil {
+		panic(err)
+	}
 	defer file.Close()
 	reader := bufio.NewReader(tmpFile)
 	preLine := ""

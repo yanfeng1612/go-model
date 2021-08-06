@@ -5,52 +5,47 @@ package {{.config.PackageName}}.utils;
  * @author {{.author}}
  * @date {{.date}}
  **/
-public enum ResponseTemplate {
+public class ResponseTemplate {
 
-    /**
-     * 成功
-     */
-    SUCCESS {
-        @Override
-        public <T> Response<T> getResponse(T data) {
-            Response<T> response = new Response<>();
-            response.setCode(APIMsgCode.SUCCESS.getCode());
-            response.setMessage(APIMsgCode.SUCCESS.getValue());
-            response.setStatus(APIEmRequestStatus.SUCCESS);
-            response.setData(data);
-            return response;
-        }
-    },
+    public static <T> Response<T> success() {
+        Response<T> response = new Response<>();
+        response.setCode(APIMsgCode.SUCCESS.getCode());
+        response.setMessage(APIMsgCode.SUCCESS.getValue());
+        response.setStatus(APIEmRequestStatus.SUCCESS);
+        return response;
+    }
 
-    /**
-     * 失败
-     */
-    FAILURE {
-        @Override
-        public <T> Response<T> getResponse(T data) {
-            Response<T> response = new Response<>();
-            response.setCode(APIMsgCode.FAILURE.getCode());
-            response.setStatus(APIEmRequestStatus.FAIL);
-            return response;
-        }
-    },
+    public static <T> Response<T> success(T data) {
+        Response<T> response = new Response<>();
+        response.setCode(APIMsgCode.SUCCESS.getCode());
+        response.setMessage(APIMsgCode.SUCCESS.getValue());
+        response.setStatus(APIEmRequestStatus.SUCCESS);
+        response.setData(data);
+        return response;
+    }
 
-    /**
-     * 未授权
-     */
-    UNAUTHORIZED {
-        @Override
-        public <T> Response<T> getResponse(T data) {
-            Response<T> response = new Response<>();
-            response.setCode(APIMsgCode.UNAUTHORIZED.getCode());
-            response.setMessage(APIMsgCode.UNAUTHORIZED.getValue());
-            response.setStatus(APIEmRequestStatus.FAIL);
-            response.setData(data);
-            return response;
-        }
-    };
+    public static <T> Response<T> fail() {
+        Response<T> response = new Response<>();
+        response.setCode(APIMsgCode.FAILURE.getCode());
+        response.setStatus(APIEmRequestStatus.FAIL);
+        return response;
+    }
 
-    public abstract <T> Response<T> getResponse(T data);
+    public static <T> Response<T> fail(String msg) {
+        Response<T> response = new Response<>();
+        response.setCode(APIMsgCode.FAILURE.getCode());
+        response.setStatus(APIEmRequestStatus.FAIL);
+        response.setMessage(msg);
+        return response;
+    }
+
+    public static <T> Response<T> fail(T data) {
+        Response<T> response = new Response<>();
+        response.setCode(APIMsgCode.FAILURE.getCode());
+        response.setStatus(APIEmRequestStatus.FAIL);
+        response.setData(data);
+        return response;
+    }
 
     public static <T> Response<T> getResponse(APIMsgCode apiMsgCode, T data) {
         Response<T> response = new Response<>();

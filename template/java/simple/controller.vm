@@ -113,7 +113,7 @@ public class {{.backendObject.JavaBeanName}}Controller {
         } catch (Exception e) {
             log.error("分页查询数据参数信息exception: ", e);
         }
-        return ResponseTemplate.FAILURE.getResponse(null);
+        return ResponseTemplate.fail();
     }
 
     /**
@@ -128,7 +128,7 @@ public class {{.backendObject.JavaBeanName}}Controller {
             return ResponseTemplate.getResponse(APIMsgCode.SUCCESS, result);
         } catch (Exception e) {
             log.error("查询数据异常:{}",id,e);
-            response = ResponseTemplate.FAILURE.getResponse(null);
+            response = ResponseTemplate.fail();
         }
         return response;
     }

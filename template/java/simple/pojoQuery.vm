@@ -27,7 +27,9 @@ public class {{.backendObject.JavaBeanName}}Query extends Query {
 
     private {{.backendObject.JavaBeanName}}Query(Builder builder) {
         {{range $i,$field := .backendObject.Columns}}
-        this.{{$field.JavaFieldName}} = builder.{{$field.JavaFieldName}};{{end}}
+        this.{{$field.JavaFieldName}} = builder.{{$field.JavaFieldName}};
+        {{if eq $field.InListQuery 1}}this.{{$field.JavaFieldName}}List = builder.{{$field.JavaFieldName}}List;{{end}}
+        {{end}}
     }
 
     {{range $i,$field := .backendObject.Columns}}
@@ -35,6 +37,14 @@ public class {{.backendObject.JavaBeanName}}Query extends Query {
      * {{$field.Comment}}
      */
     private {{$field.JavaFieldType}} {{$field.JavaFieldName}};
+
+    {{if eq $field.InListQuery 1}}
+    /**
+     * {{$field.Comment}}
+     */
+    private List<{{$field.JavaFieldType}}> {{$field.JavaFieldName}}List;
+    {{end}}
+
     {{end}}
 
     public static class Builder {
@@ -43,6 +53,12 @@ public class {{.backendObject.JavaBeanName}}Query extends Query {
         * {{$field.Comment}}
         */
         private {{$field.JavaFieldType}} {{$field.JavaFieldName}};
+        {{if eq $field.InListQuery 1}}
+        /**
+        * {{$field.Comment}}
+        */
+        private List<{{$field.JavaFieldType}}> {{$field.JavaFieldName}}List;
+        {{end}}
     {{end}}
 
     {{range $i,$field := .backendObject.Columns}}
@@ -53,6 +69,15 @@ public class {{.backendObject.JavaBeanName}}Query extends Query {
             this.{{$field.JavaFieldName}} = {{$field.JavaFieldName}};
             return this;
         }
+        {{if eq $field.InListQuery 1}}
+        /**
+         * {{$field.Comment}}List
+         */
+        public Builder {{$field.JavaFieldName}}List(List<{{$field.JavaFieldType}}> {{$field.JavaFieldName}}List) {
+            this.{{$field.JavaFieldName}}List = {{$field.JavaFieldName}}List;
+            return this;
+        }
+        {{end}}
     {{end}}
 
         public {{.backendObject.JavaBeanName}}Query build() {

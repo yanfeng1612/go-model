@@ -9,4 +9,10 @@ public class Query<T> {
 
     private T query;
 
+    public static <T> Query<T> newQuery(T q) {
+        Query<T> query = new Query<>();
+        query.setQuery(q);
+        return query;
+    }
+
 }
