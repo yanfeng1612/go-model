@@ -109,6 +109,13 @@ const routes = [
                     title: '富文本编辑器'
                 },
                 component: () => import (/* webpackChunkName: "editor" */ '../views/Editor.vue')
+            },{
+                path: '/order',
+                name: 'order',
+                meta: {
+                    title: '订单'
+                },
+                component: () => import (/* webpackChunkName: "editor" */ '../views/order/list.vue')
             }
         ]
     }, {

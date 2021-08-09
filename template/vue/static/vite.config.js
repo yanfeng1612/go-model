@@ -8,7 +8,13 @@ export default {
     },
     server: {
         proxy: {
-            '/api': 'https://api.*.com/'
+            '/api': {
+                target: 'http://localhost:1601',
+                changeOrigin: true,
+                pathRewrite:{
+                    '^/api':''
+                }
+            }
         }
     }
 }

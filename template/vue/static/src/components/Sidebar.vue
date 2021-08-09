@@ -113,6 +113,11 @@ export default {
                 index: "/donate",
                 title: "支持作者",
             },
+            {
+                icon: "el-icon-lx-redpacket_fill",
+                index: "/order",
+                title: "订单",
+            },
         ];
 
         const route = useRoute();
