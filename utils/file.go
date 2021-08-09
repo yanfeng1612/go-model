@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -23,8 +24,11 @@ func CopyDir(srcPath string, destPath string) error {
 		}
 	}
 	if destInfo, err := os.Stat(destPath); err != nil {
-		fmt.Println(err.Error())
-		return err
+		err = os.MkdirAll(destPath, os.ModePerm)
+		if err != nil {
+			log.Fatal("创建目录失败", err)
+			return err
+		}
 	} else {
 		if !destInfo.IsDir() {
 			e := errors.New("destInfo不是一个正确的目录！")

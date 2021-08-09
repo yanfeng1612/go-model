@@ -34,6 +34,7 @@ type Column struct {
 	SingleQuery      int
 	RangeQuery       int
 	UpdateField      int
+	RangeField       int
 	WhereUpdateField int
 }
 

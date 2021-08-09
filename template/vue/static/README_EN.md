@@ -16,70 +16,58 @@
     <img src="https://img.shields.io/badge/%24-donate-ff69b4.svg" alt="donate">
   </a>
 
-基于 Vue3 + Element Plus 的后台管理系统解决方案。[线上地址](https://lin-xin.gitee.io/example/work/)
+The web management system solution based on Vue3 and ElementPlus。[live demo](https://lin-xin.gitee.io/example/work/)
 
-> Vue2 版本请看 [tag-V4.2.0](https://github.com/lin-xin/vue-manage-system/tree/V4.2.0)
+Please check the version of vue2 in [tag V4.2.0](https://github.com/lin-xin/vue-manage-system/tree/V4.2.0)
 
-[English document](https://github.com/lin-xin/manage-system/blob/master/README_EN.md)
+## Donation
 
-## 项目截图
+![WeChat](https://lin-xin.gitee.io/images/weixin.jpg)
 
-### 登录
+## Preface
 
-![Image text](https://github.com/lin-xin/manage-system/raw/master/screenshots/wms3.png)
+The scheme as a set of multi-function background frame templates, suitable for most of the WEB management system development. Convenient development fast simple good components based on Vue3 and ElementPlus. Color separation of color style, support manual switch themes, and it is convenient to use a custom theme color.
 
-### 首页
+## Function
 
-![Image text](https://github.com/lin-xin/manage-system/raw/master/screenshots/wms1.png)
-
-## 赞赏
-
-请作者喝杯咖啡吧！(微信号：linxin_20)
-
-![微信扫一扫](https://lin-xin.gitee.io/images/weixin.jpg)
-
-## 前言
-
-该方案作为一套多功能的后台框架模板，适用于绝大部分的后台管理系统（Web Management System）开发。基于 Vue3，使用 vue-cli3 脚手架，引用 Element Plus 组件库，方便开发快速简洁好看的组件。分离颜色样式，支持手动切换主题色，而且很方便使用自定义主题色。
-
-## 功能
-
--   [x] Element Plus
--   [x] 登录/注销
+-   [x] Element-UI
+-   [x] Login/Logout
 -   [x] Dashboard
--   [x] 表格
--   [x] Tab 选项卡
--   [x] 表单
--   [x] 图表 :bar_chart:
--   [x] 富文本编辑器
--   [x] 图片拖拽/裁剪上传
--   [x] 权限测试
+-   [x] Table
+-   [x] Tabs
+-   [x] From
+-   [x] Chart :bar_chart:
+-   [ ] Editor
+-   [ ] Markdown
+-   [x] Upload pictures by clipping or dragging
+-   [ ] Support manual switch themes :sparkles:
+-   [ ] List drag sort
+-   [x] Permission
 -   [x] 404 / 403
--   [x] 三级菜单
--   [x] 自定义图标
--   [x] 国际化
+-   [x] Three level menu
+-   [x] Custom icon
 
-## 安装步骤
+## Installation steps
 
-```
-git clone https://github.com/lin-xin/vue-manage-system.git      // 把模板下载到本地
-cd vue-manage-system    // 进入模板目录
-npm install         // 安装项目依赖，等待安装完成之后，安装失败可用 cnpm 或 yarn
+    git clone https://github.com/lin-xin/vue-manage-system.git		// Clone templates
+    cd vue-manage-system											// Enter template directory
+    npm install													// Installation dependency
 
-// 开启服务器，浏览器访问 http://localhost:8080
-npm run dev
+## Local development
 
-// 执行构建命令，生成的dist文件夹放在服务器下即可访问
-npm run build
-```
+    // Open server and access http://localhost:8080 in browser
+    npm run serve
 
-## 组件使用说明与演示
+## Constructing production
+
+    // Constructing project
+    npm run build
+
+## Component description and presentation
 
 ### vue-schart
 
-vue.js 封装 sChart.js 的图表组件。访问地址：[vue-schart](https://github.com/linxin/vue-schart)
-
-<p><a href="https://www.npmjs.com/package/vue-schart"><img src="https://img.shields.io/npm/dm/vue-schart.svg" alt="Downloads"></a></p>
+Vue.js wrapper for sChart.js. Github : [vue-schart](https://github.com/linxin/vue-schart)
 
 ```html
 <template>
@@ -128,6 +116,20 @@ vue.js 封装 sChart.js 的图表组件。访问地址：[vue-schart](https://gi
     }
 </style>
 ```
+
+### element-ui
+
+A desktop component library based on vue.js2.0 . Github : [element](http://element.eleme.io/#/zh-CN/component/layout)
+
+## Screenshot
+
+### Default theme
+
+![Image text](https://github.com/lin-xin/manage-system/raw/master/screenshots/wms1.png)
+
+### Login
+
+![Image text](https://github.com/lin-xin/manage-system/raw/master/screenshots/wms3.png)
 
 ## License
 

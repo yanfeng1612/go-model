@@ -196,7 +196,7 @@ public class {{.backendObject.JavaBeanName}}Service {
      * 根据{{$field.Comment}}查询
      */
     public {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
-        return {{$.backendObject.JavaBeanNameLower}}Mapper.search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.Name}});
     }
     {{end}}
     {{end}}
@@ -207,7 +207,7 @@ public class {{.backendObject.JavaBeanName}}Service {
      * 根据{{$field.Comment}}修改
      */
     public {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
-        return {{$.backendObject.JavaBeanNameLower}}Mapper.update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.Name}});
     }
     {{end}}
     {{end}}

@@ -39,11 +39,18 @@ type TableConfig struct {
 	SingleQueryList []string `json:"singleQueryList"`
 	InListQuery     []string `json:"inListQuery"`
 	UpdateFieldList []string `json:"updateFieldList"`
+	RangeFieldList  []string `json:"RangeFieldList"`
 }
 
 type Theme struct {
 	ThemeName string
 	templates []string
+}
+
+type TemplateObject struct {
+	name         string
+	templatePath string
+	outputPath   string
 }
 
 const (
@@ -96,12 +103,6 @@ var (
 	UtilTemplateList = []string{"basicResult", "genericResult", "codeEnum", "query", "pageQuery", "pageQueryWrapper", "idPageQuery", "pagenation", "listResult", "pageListResult", "aPIEmRequestStatus", "aPIMsgCode", "response", "responseTemplate", "codeConverter", "gitIgnore", "assembly", "start", "stop"}
 )
 
-type TemplateObject struct {
-	name         string
-	templatePath string
-	outputPath   string
-}
-
 func main() {
 	fmt.Println("start generate work")
 	args := os.Args
@@ -130,6 +131,7 @@ func main() {
 	inListMap := make(map[string]int)
 	singleQueryMap := make(map[string]int)
 	updateFieldMap := make(map[string]int)
+	rangeFieldMap := make(map[string]int)
 	for _, t := range config.TableConfigList {
 		for _, c := range t.InListQuery {
 			inListMap[t.TableName+"_"+c] = 1
@@ -139,6 +141,9 @@ func main() {
 		}
 		for _, c := range t.UpdateFieldList {
 			updateFieldMap[t.TableName+"_"+c] = 1
+		}
+		for _, c := range t.RangeFieldList {
+			rangeFieldMap[t.TableName+"_"+c] = 1
 		}
 	}
 
@@ -159,6 +164,11 @@ func main() {
 			} else {
 				c.UpdateField = 0
 			}
+			if _, ok := rangeFieldMap[t.Name+"_"+c.Name]; ok {
+				c.RangeField = 1
+			} else {
+				c.RangeField = 0
+			}
 		}
 	}
 
@@ -166,6 +176,7 @@ func main() {
 
 	buildUtils(*config, templateMap)
 	buildDynamic(*config, schema, templateList)
+	runVue(*config, schema, templateList)
 	fmt.Println("end generate work")
 }
 
@@ -353,6 +364,29 @@ func buildDynamic(config Config, schema *utils.Schema, templateObjectList []Temp
 	//	run(vueIndexPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/router/index.js", m)
 	//	run(vueSidebarPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/common/Sidebar.vue", m)
 	//}
+}
+
+func runVue(config Config, schema *utils.Schema, templateObjectList []TemplateObject) {
+	if config.FrontTheme == "None" {
+		return
+	}
+
+	utils.CopyDir("template/vue/static", config.ExportPath+"/"+config.ProjectAdminName)
+
+	for _, table := range schema.Tables {
+		m := buildCommonMap(config)
+		m["backendObject"] = table
+		m["columnSize"] = len(table.Columns)
+		m["l"] = "{{"
+		m["r"] = "}}"
+		m["l1"] = "{"
+
+		run(vueListPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/views/"+table.JavaBeanNameLower+"/list.vue", m)
+
+		// for _, tem := range templateObjectList {
+		// run(tem.templatePath, strings.ReplaceAll(tem.outputPath, "%s", table.JavaBeanName), m)
+		// }
+	}
 }
 
 func createFile(path string) (*os.File, error) {

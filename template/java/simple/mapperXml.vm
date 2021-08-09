@@ -44,7 +44,7 @@
                 </foreach>
             </if>
         {{end}}
-        {{if eq $field.SingleQuery 1}}
+        {{if eq $field.RangeField 1}}
             <if test="query.{{$field.JavaFieldName}}Start != null">
                 and {{$field.Name}} &gt;= #{query.{{$field.JavaFieldName}}Start}
             </if>
