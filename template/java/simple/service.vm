@@ -138,7 +138,6 @@ public class {{.backendObject.JavaBeanName}}Service {
         long count = {{.backendObject.JavaBeanNameLower}}Mapper.getCount(pageQuery);
         PageQueryWrapper<{{.backendObject.JavaBeanName}}Query> wrapper = new PageQueryWrapper<{{.backendObject.JavaBeanName}}Query>(pageQuery.getPageNo(),pageQuery.getPageSize(),count,pageQuery.getQuery());
         List<{{.backendObject.JavaBeanName}}> itemList = {{.backendObject.JavaBeanNameLower}}Mapper.getPagenationList(wrapper);
-        PageListResult<{{.backendObject.JavaBeanName}}> retValue = new PageListResult<>();
         result.setMsg("查询成功");
         result.setCode(CodeEnum.SUCCESS.getCode());
         result.setValues(itemList);
@@ -195,8 +194,8 @@ public class {{.backendObject.JavaBeanName}}Service {
     /**
      * 根据{{$field.Comment}}查询
      */
-    public {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
-        return {{$.backendObject.JavaBeanNameLower}}Mapper.search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.Name}});
+    public {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.JavaFieldName}}) {
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldName}});
     }
     {{end}}
     {{end}}
@@ -206,8 +205,8 @@ public class {{.backendObject.JavaBeanName}}Service {
     /**
      * 根据{{$field.Comment}}修改
      */
-    public {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}}) {
-        return {{$.backendObject.JavaBeanNameLower}}Mapper.update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.Name}});
+    public {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.JavaFieldName}}) {
+        return {{$.backendObject.JavaBeanNameLower}}Mapper.update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldName}});
     }
     {{end}}
     {{end}}

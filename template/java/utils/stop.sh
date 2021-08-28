@@ -5,15 +5,13 @@ set -o nounset
 
 EXE_JAR="demo.jar"
 #获取当前应用的进程 id
-function get_running_pid
-{
+function get_running_pid {
   pgrep -f "$EXE_JAR"
 }
 
 readonly SELF_DIR=$(cd $(dirname $0) && pwd)
 
-function stop
-{
+function stop {
     local -i timeout=20
     local -i interval=1
     local -r service_pid=$(get_running_pid) || true # ignore error
@@ -32,8 +30,8 @@ function stop
         kill -9 "$service_pid"
     fi
 }
-function main
-{
+
+function main {
     get_running_pid > /dev/null || {
         echo "WARNING: process not found, nothing to stop" >&2
         exit 0  # Ignore error

@@ -54,32 +54,39 @@ type TemplateObject struct {
 }
 
 const (
-	TemplateRootPath            = "template"                                            // 模板根路径
-	TemplateJavaRootPath        = TemplateRootPath + "/java"                            // java模板根路径
-	SimpleThemeTemplateRootPath = TemplateJavaRootPath + "/simple/"                     // java模板根路径
-	TemplateVueRootPath         = TemplateRootPath + "/vue"                             // java模板根路径
-	PomPath                     = TemplateJavaRootPath + "/utils/pom.vm"                // pom路径
-	BasicResultPath             = TemplateJavaRootPath + "/utils/BasicResult.vm"        // BasicResultPath路径
-	GenericResultPath           = TemplateJavaRootPath + "/utils/GenericResult.vm"      // GenericResult路径
-	CodeEnumPath                = TemplateJavaRootPath + "/utils/CodeEnum.vm"           // CodeEnumPath路径
-	QueryPath                   = TemplateJavaRootPath + "/utils/Query.vm"              // Query路径
-	PageQueryPath               = TemplateJavaRootPath + "/utils/PageQuery.vm"          // PageQuery路径
-	IdPageQueryPath             = TemplateJavaRootPath + "/utils/IdPageQuery.vm"        // IdPageQuery路径
-	PagenationPath              = TemplateJavaRootPath + "/utils/Pagenation.vm"         // Pagenation路径
-	PageQueryWrapperPath        = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"   // PageQueryWrapper路径
-	ListResultPath              = TemplateJavaRootPath + "/utils/ListResult.vm"         // ListResult路径
-	PageListResultPath          = TemplateJavaRootPath + "/utils/PageListResult.vm"     // PageListResult路径
-	APIEmRequestStatusPath      = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm" // APIEmRequestStatus路径
-	APIMsgCodePath              = TemplateJavaRootPath + "/utils/APIMsgCode.vm"         // APIMsgCode路径
-	ResponsePath                = TemplateJavaRootPath + "/utils/Response.vm"           // Response路径
-	ResponseTemplatePath        = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"   // ResponseTemplate路径
-	CodeConverterPath           = TemplateJavaRootPath + "/utils/CodeConverter.vm"      // CodeConverter路径
-	BootstrapPath               = TemplateJavaRootPath + "/utils/Bootstrap.vm"          // Bootstrap路径
-	ApplicationConfigPath       = TemplateJavaRootPath + "/utils/application.vm"        // application路径
-	GitIgnorePath               = TemplateJavaRootPath + "/utils/gitignore.vm"          // gitignore路径
-	AssemblyPath                = TemplateJavaRootPath + "/utils/assembly.vm"           // assembly路径
-	StartPath                   = TemplateJavaRootPath + "/utils/start.sh"              // start路径
-	StopPath                    = TemplateJavaRootPath + "/utils/stop.sh"               // stop路径
+	TemplateRootPath            = "template"                        // 模板根路径
+	TemplateJavaRootPath        = TemplateRootPath + "/java"        // java模板根路径
+	SimpleThemeTemplateRootPath = TemplateJavaRootPath + "/simple/" // java模板根路径
+	TemplateVueRootPath         = TemplateRootPath + "/vue"         // java模板根路径
+
+	PomPath                      = TemplateJavaRootPath + "/utils/pom.vm"                 // pom路径
+	BootstrapPath                = TemplateJavaRootPath + "/utils/Bootstrap.vm"           // Bootstrap路径
+	ApplicationConfigPath        = TemplateJavaRootPath + "/utils/application.vm"         // application路径
+	ApplicationDevConfigPath     = TemplateJavaRootPath + "/utils/application-dev.vm"     // application路径
+	ApplicationTestConfigPath    = TemplateJavaRootPath + "/utils/application-test.vm"    // application路径
+	ApplicationPreConfigPath     = TemplateJavaRootPath + "/utils/application-pre.vm"     // application路径
+	ApplicationProductConfigPath = TemplateJavaRootPath + "/utils/application-product.vm" // application路径
+
+	GitIgnorePath = TemplateJavaRootPath + "/utils/gitignore.vm" // gitignore路径
+	AssemblyPath  = TemplateJavaRootPath + "/utils/assembly.vm"  // assembly路径
+	StartPath     = TemplateJavaRootPath + "/utils/start.sh"     // start路径
+	StopPath      = TemplateJavaRootPath + "/utils/stop.sh"      // stop路径
+
+	BasicResultPath        = TemplateJavaRootPath + "/utils/BasicResult.vm"        // BasicResultPath路径
+	GenericResultPath      = TemplateJavaRootPath + "/utils/GenericResult.vm"      // GenericResult路径
+	CodeEnumPath           = TemplateJavaRootPath + "/utils/CodeEnum.vm"           // CodeEnumPath路径
+	QueryPath              = TemplateJavaRootPath + "/utils/Query.vm"              // Query路径
+	PageQueryPath          = TemplateJavaRootPath + "/utils/PageQuery.vm"          // PageQuery路径
+	IdPageQueryPath        = TemplateJavaRootPath + "/utils/IdPageQuery.vm"        // IdPageQuery路径
+	PagenationPath         = TemplateJavaRootPath + "/utils/Pagenation.vm"         // Pagenation路径
+	PageQueryWrapperPath   = TemplateJavaRootPath + "/utils/PageQueryWrapper.vm"   // PageQueryWrapper路径
+	ListResultPath         = TemplateJavaRootPath + "/utils/ListResult.vm"         // ListResult路径
+	PageListResultPath     = TemplateJavaRootPath + "/utils/PageListResult.vm"     // PageListResult路径
+	APIEmRequestStatusPath = TemplateJavaRootPath + "/utils/APIEmRequestStatus.vm" // APIEmRequestStatus路径
+	APIMsgCodePath         = TemplateJavaRootPath + "/utils/APIMsgCode.vm"         // APIMsgCode路径
+	ResponsePath           = TemplateJavaRootPath + "/utils/Response.vm"           // Response路径
+	ResponseTemplatePath   = TemplateJavaRootPath + "/utils/ResponseTemplate.vm"   // ResponseTemplate路径
+	CodeConverterPath      = TemplateJavaRootPath + "/utils/CodeConverter.vm"      // CodeConverter路径
 
 	PojoPath        = TemplateJavaRootPath + "/pojo.vm"        // pojo路径
 	PojoQueryPath   = TemplateJavaRootPath + "/pojoQuery.vm"   // pojoQuery路径
@@ -90,17 +97,18 @@ const (
 	ManagerImplPath = TemplateJavaRootPath + "/managerImpl.vm" // managerImpl路径
 	MapperPath      = TemplateJavaRootPath + "/mapper.vm"      // mapper路径
 	MapperXmlPath   = TemplateJavaRootPath + "/mapperXml.vm"   // mapperXml路径
-	vueListPath     = TemplateVueRootPath + "/list.vm"         // viewList路径
-	vueEditPath     = TemplateVueRootPath + "/edit.vm"         // viewEdit路径
-	vueDetailPath   = TemplateVueRootPath + "/detail.vm"       // viewDetail路径
-	vueIndexPath    = TemplateVueRootPath + "/index.vm"        // viewIndex路径
-	vueSidebarPath  = TemplateVueRootPath + "/sidebar.vm"      // viewSidebar路径
+
+	vueListPath    = TemplateVueRootPath + "/list.vm"    // viewList路径
+	vueEditPath    = TemplateVueRootPath + "/edit.vm"    // viewEdit路径
+	vueDetailPath  = TemplateVueRootPath + "/detail.vm"  // viewDetail路径
+	vueIndexPath   = TemplateVueRootPath + "/index.vm"   // viewIndex路径
+	vueSidebarPath = TemplateVueRootPath + "/sidebar.vm" // viewSidebar路径
 )
 
 var (
 	SIMPLE_THEME     = []string{"simple-pojo", "simple-pojoQuery", "simple-controller", "simple-service", "simple-mapper", "simple-mapperXml"}
 	STANDARD_THEME   = []string{"pojo", "pojoQuery", "controller", "service", "serviceImpl", "manager", "managerImpl", "mapper", "mapperXml"}
-	UtilTemplateList = []string{"basicResult", "genericResult", "codeEnum", "query", "pageQuery", "pageQueryWrapper", "idPageQuery", "pagenation", "listResult", "pageListResult", "aPIEmRequestStatus", "aPIMsgCode", "response", "responseTemplate", "codeConverter", "gitIgnore", "assembly", "start", "stop"}
+	UtilTemplateList = []string{"pom", "bootstrap", "application", "application-dev", "application-test", "application-pre", "application-product", "basicResult", "genericResult", "codeEnum", "query", "pageQuery", "pageQueryWrapper", "idPageQuery", "pagenation", "listResult", "pageListResult", "aPIEmRequestStatus", "aPIMsgCode", "response", "responseTemplate", "codeConverter", "gitIgnore", "assembly", "start", "stop"}
 )
 
 func main() {
@@ -189,6 +197,11 @@ func prepare(config Config, theme string) (map[string]TemplateObject, []Template
 	m["pom"] = TemplateObject{"pom", PomPath, config.ExportPath + "/" + config.ProjectName + "/pom.xml"}
 	m["bootstrap"] = TemplateObject{"bootstrap", BootstrapPath, prefix + "/Bootstrap.java"}
 	m["application"] = TemplateObject{"application", ApplicationConfigPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/application.yml"}
+	m["application-dev"] = TemplateObject{"application-dev", ApplicationDevConfigPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/application-dev.yml"}
+	m["application-test"] = TemplateObject{"application-test", ApplicationTestConfigPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/application-test.yml"}
+	m["application-pre"] = TemplateObject{"application-pre", ApplicationPreConfigPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/application-pre.yml"}
+	m["application-product"] = TemplateObject{"application-product", ApplicationProductConfigPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/application-product.yml"}
+
 	m["gitIgnore"] = TemplateObject{"gitIgnore", GitIgnorePath, config.ExportPath + "/" + config.ProjectName + "/.gitignore"}
 	m["assembly"] = TemplateObject{"assembly", AssemblyPath, config.ExportPath + "/" + config.ProjectName + "/src/main/resources/assembly.xml"}
 	m["start"] = TemplateObject{"start", StartPath, config.ExportPath + "/" + config.ProjectName + "/src/main/bin/start.sh"}
@@ -249,14 +262,8 @@ func buildUtils(config Config, templateMap map[string]TemplateObject) {
 		return
 	}
 
-	if config.FirstInit {
-		pomObj := templateMap["pom"]
-		bootstrapObj := templateMap["bootstrap"]
-		applicationObj := templateMap["application"]
-
-		run(pomObj.templatePath, pomObj.outputPath, m)
-		run(bootstrapObj.templatePath, bootstrapObj.outputPath, m)
-		run(applicationObj.templatePath, applicationObj.outputPath, m)
+	if !config.FirstInit {
+		return
 	}
 
 	for _, templateName := range UtilTemplateList {
@@ -356,14 +363,6 @@ func buildDynamic(config Config, schema *utils.Schema, templateObjectList []Temp
 			run(tem.templatePath, strings.ReplaceAll(tem.outputPath, "%s", table.JavaBeanName), m)
 		}
 	}
-	//if config.FrontTheme != "None" {
-	//	m := make(map[string]interface{})
-	//	m["tables"] = schema.Tables
-	//	m["l"] = "{{"
-	//	m["r"] = "}}"
-	//	run(vueIndexPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/router/index.js", m)
-	//	run(vueSidebarPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/components/common/Sidebar.vue", m)
-	//}
 }
 
 func runVue(config Config, schema *utils.Schema, templateObjectList []TemplateObject) {
@@ -382,10 +381,6 @@ func runVue(config Config, schema *utils.Schema, templateObjectList []TemplateOb
 		m["l1"] = "{"
 
 		run(vueListPath, config.ExportPath+"/"+config.ProjectAdminName+"/src/views/"+table.JavaBeanNameLower+"/list.vue", m)
-
-		// for _, tem := range templateObjectList {
-		// run(tem.templatePath, strings.ReplaceAll(tem.outputPath, "%s", table.JavaBeanName), m)
-		// }
 	}
 }
 

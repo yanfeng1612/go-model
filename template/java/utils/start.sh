@@ -17,8 +17,7 @@
 #set -o errexit
 readonly APP_NAME="demo"          #定义当前应用的名称
 #获取当前应用的进程 id
-function get_pid
-{
+function get_running_pid {
   pgrep -f "$EXE_JAR"
 }
 
@@ -43,7 +42,8 @@ echo "Starting $APP_NAME ...."
     exit 1
 }
 cd $BASEDIR
-setsid "$JAVA" $SGM_OPTS $OPTS_MEMORY -jar "$EXE_JAR" "$@" > /dev/null 2>&1 &
+#setsid "$JAVA" $OPTS_MEMORY -jar "$EXE_JAR" "$@" > /dev/null 2>&1 &
+java $OPTS_MEMORY -jar "$EXE_JAR" "$@" > /dev/null 2>&1 &
 
 sleep 0.5
 [[ -n $(get_pid) ]] || {

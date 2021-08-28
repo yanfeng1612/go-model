@@ -84,7 +84,7 @@ public interface {{.backendObject.JavaBeanName}}Mapper {
     /**
      * 根据{{$field.Comment}}查询
      */
-    {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+    {{$.backendObject.JavaBeanName}} search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.JavaFieldName}});
     {{end}}
     {{end}}
 
@@ -93,7 +93,7 @@ public interface {{.backendObject.JavaBeanName}}Mapper {
     /**
      * 根据{{$field.Comment}}修改
      */
-    {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.Name}});
+    {{$.backendObject.JavaBeanName}} update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}({{$field.JavaFieldType}} {{$field.JavaFieldName}});
     {{end}}
     {{end}}
 

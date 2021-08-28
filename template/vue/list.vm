@@ -93,19 +93,9 @@
                     method: 'post',
                     data: sData
                 }).then((res) => {
-                    tableData.value = res.list;
-                    pageTotal.value = res.pageTotal || 50;
+                    self.tableData = res.data.values;
+                    self.pageInfo.pageNo = res.data.pagenation.pageCount || 50;
                 });
-
-                //requestData({
-                //    "url": "/api/{{.backendObject.JavaBeanNameLower}}/list?pageSize=" + self.pageInfo.pageSize + "&pageNo=" + self.pageInfo.curPage,
-                //    "data": this.searchData
-                //    , "callback": function (response) {
-                //        self.tableData = response.values;
-                //        self.pageInfo.curPage = response.pagenation.pageNo;
-                //        self.pageInfo.itemCount = response.pagenation.itemCount;
-                //   }
-                //});
             },
             toAdd() {
                 this.$router.push({path: '/{{.backendObject.JavaBeanNameLower}}Edit'});

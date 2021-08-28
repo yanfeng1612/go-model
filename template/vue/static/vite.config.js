@@ -11,9 +11,7 @@ export default {
             '/api': {
                 target: 'http://localhost:1601',
                 changeOrigin: true,
-                pathRewrite:{
-                    '^/api':''
-                }
+                rewrite: (path) => path.replace(/^\/api/, '')
             }
         }
     }

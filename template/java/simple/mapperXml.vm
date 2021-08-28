@@ -78,7 +78,7 @@
 
     <insert id="insert" parameterType="{{.backendObject.JavaBeanName}}"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         /* {{.backendObject.Comment}} */
-        INSERT  INTO  {{.backendObject.Name}}
+        INSERT  INTO  `{{.backendObject.Name}}`
         (
             <include refid="getInsertField" />
         )
@@ -88,7 +88,7 @@
     </insert>
 
     <insert id="insertBatch" parameterType="java.util.List">
-        INSERT  INTO  {{.backendObject.Name}}
+        INSERT  INTO  `{{.backendObject.Name}}`
         <trim prefix="(" suffix=")" prefixOverrides=",">
         {{range $i,$field := .backendObject.Columns}}
             ,{{$field.Name}}	/* {{$field.Comment}} */
@@ -106,7 +106,7 @@
 
     <insert id="insertOrUpdate" parameterType="{{.backendObject.JavaBeanName}}"  useGeneratedKeys="true" keyColumn="id" keyProperty="id">
         /* {{.backendObject.Comment}} */
-        INSERT  INTO  {{.backendObject.Name}}
+        INSERT  INTO  `{{.backendObject.Name}}`
         (
             <include refid="getInsertField" />
         )
@@ -123,11 +123,11 @@
     </insert>
 
     <delete id="deleteById" parameterType="java.lang.Long">
-        DELETE FROM {{.backendObject.Name}} WHERE id = #{id}
+        DELETE FROM `{{.backendObject.Name}}` WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="{{.backendObject.JavaBeanName}}" >
-        UPDATE  {{.backendObject.Name}}
+        UPDATE  `{{.backendObject.Name}}`
         /* {{.backendObject.Comment}} */
         <trim prefix="SET" prefixOverrides=",">
         {{range $i,$field := .backendObject.Columns}}
@@ -145,7 +145,7 @@
     <select id="findById" parameterType="java.lang.Long" resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM  {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
+        FROM  `{{.backendObject.Name}}`  /* {{.backendObject.Comment}} */
         WHERE
         id = #{id}
     </select>
@@ -153,7 +153,7 @@
     <select id="getAllList" parameterType="{{.config.PackageName}}.utils.Query"  resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM {{.backendObject.Name}}  /* {{.backendObject.Comment}} */
+        FROM `{{.backendObject.Name}}`  /* {{.backendObject.Comment}} */
         WHERE 1 = 1
         <include refid="wherecontation"/>
         ORDER BY id DESC
@@ -162,7 +162,7 @@
     <select id="getPagenationList" parameterType="{{.config.PackageName}}.utils.PageQueryWrapper" resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM   {{.backendObject.Name}} /*  {{.backendObject.Comment}} */
+        FROM   `{{.backendObject.Name}}` /*  {{.backendObject.Comment}} */
         WHERE 1=1
         <include refid="wherecontation"/>
         ORDER BY id DESC
@@ -172,7 +172,7 @@
     <select id="getPagenationListById" parameterType="{{.config.PackageName}}.utils.IdPageQuery" resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM   {{.backendObject.Name}} /*  {{.backendObject.Comment}} */
+        FROM   `{{.backendObject.Name}}` /*  {{.backendObject.Comment}} */
         WHERE id > #{minId}
         <include refid="wherecontation"/>
         ORDER BY id ASC
@@ -180,13 +180,13 @@
     </select>
 
     <select id="getCount" parameterType="{{.config.PackageName}}.utils.PageQuery" resultType="java.lang.Long">
-        SELECT COUNT(*)  FROM  {{.backendObject.Name}}  /*  {{.backendObject.Comment}} */
+        SELECT COUNT(*)  FROM  `{{.backendObject.Name}}`  /*  {{.backendObject.Comment}} */
         WHERE 1 = 1
         <include refid="wherecontation"/>
     </select>
 
     <select id="getTotalCount" parameterType="{{.config.PackageName}}.utils.Query" resultType="java.lang.Long">
-        SELECT count(*)  FROM  {{.backendObject.Name}} /* {{.backendObject.Comment}} */
+        SELECT count(*)  FROM  `{{.backendObject.Name}}` /* {{.backendObject.Comment}} */
         WHERE 1=1
         <include refid="wherecontation"/>
     </select>
@@ -196,7 +196,7 @@
     <select id="search{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}" parameterType="{{$.backendObject.JavaBeanName}}" resultMap="baseResultMap">
         SELECT
         <include refid="queryColumns" />
-        FROM {{$.backendObject.Name}} /* {{$.backendObject.Comment}} */
+        FROM `{{$.backendObject.Name}}` /* {{$.backendObject.Comment}} */
         WHERE
         {{$field.Name}} = #{{$.l1}}{{$field.JavaFieldName}}}
     </select>
@@ -206,7 +206,7 @@
     {{range $i,$field := .backendObject.Columns}}
     {{if eq $field.UpdateField 1}}
     <update id="update{{$.backendObject.JavaBeanName}}By{{$field.JavaFieldNameUP}}" parameterType="{{$.backendObject.JavaBeanName}}" >
-        UPDATE  {{$.backendObject.Name}}
+        UPDATE  `{{$.backendObject.Name}}`
         <trim prefix="SET" suffixOverrides=",">
         {{range $i,$field := $.backendObject.Columns}}
         {{if eq $field.WhereUpdateField 1}}

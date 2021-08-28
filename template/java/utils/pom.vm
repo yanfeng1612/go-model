@@ -112,9 +112,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.demo.Bootstrap</mainClass>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -144,5 +141,35 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <profileActive>test</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>pre</id>
+            <properties>
+                <profileActive>pre</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>product</id>
+            <properties>
+                <profileActive>product</profileActive>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

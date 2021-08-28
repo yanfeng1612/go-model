@@ -25,8 +25,8 @@ public class Pagenation implements Serializable {
 
     public Pagenation(long pageNo, long itemCount, int pageSize) {
         this.pageNo = pageNo;
-        this.pageSize = pageSize;
         this.itemCount = itemCount;
+        this.pageSize = pageSize;
         this.pageCount = (int)Math.ceil((double)itemCount / (double)pageSize);
     }
 
