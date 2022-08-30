@@ -19,7 +19,7 @@
     "wangeditor": "^4.7.4"
   },
   "devDependencies": {
-    "vite": "2.3.7",
+    "vite": "2.9.13",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.1.2"
   },
